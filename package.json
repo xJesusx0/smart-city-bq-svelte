@@ -4,6 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"generate:api": "openapi-typescript https://api.apidash.dev/openapi.json -o src/lib/__gen__/api_v1.d.ts",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -35,5 +36,11 @@
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.20.0",
 		"vite": "^7.0.4"
+	},
+	"dependencies": {
+		"@tanstack/svelte-query": "^5.90.2",
+		"ky": "^1.11.0",
+		"openapi-fetch": "^0.14.0",
+		"openapi-typescript": "^7.9.1"
 	}
 }
