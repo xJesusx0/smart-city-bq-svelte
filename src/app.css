@@ -1,2 +1,10 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	--color-primary-500: #134074;
+	--color-primary-600: #13315c;
+	--color-primary-700: #0b2545;
+	--color-secondary-300: #8da9c4;
+	--color-neutral-50: #eef4ed;
+}
