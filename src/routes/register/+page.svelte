@@ -1,50 +1,49 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
-	import { loginUser } from "$lib/hooks/auth";
 
 	let username = "";
 	let password = "";
+	let confirmPassword = "";
+	let isLoading = false;
 
-	const login = loginUser();
-
-	function onSubmit(event: Event) {
+	async function handleSubmit(event: Event) {
 		event.preventDefault();
+		isLoading = true;
 
-		$login.mutate(
-			{
-				username,
-				password,
-				scope: "login",
-				client_id: "123",
-				client_secret: "secret",
-				grant_type: "password"
-			},
-			{
-				onSuccess: () => goto(resolve("/dasboard"))
-			}
-		);
+		try {
+			// Here you would typically make an API call to register
+			// For now, we'll just simulate a registration
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			// Redirect to login page after successful registration
+			goto(resolve("/login"), { replaceState: true });
+		} catch (error) {
+			console.error("Registration failed:", error);
+		} finally {
+			isLoading = false;
+		}
 	}
 </script>
 
 <svelte:head>
-	<title>Login - Smart City</title>
+	<title>Register - Smart City</title>
 </svelte:head>
 
 <div class="login-container">
 	<!-- Login form -->
 	<div class="login">
-		<h2>Welcome back!</h2>
-		<h3>Let's get you logged in!</h3>
+		<h2>Create Account</h2>
+		<h3>Join Smart City today!</h3>
 
-		<form class="form" on:submit={onSubmit}>
+		<form class="form" on:submit={handleSubmit}>
 			<div class="textbox">
 				<input
 					bind:value={username}
 					required
 					type="text"
 					placeholder=" "
-					disabled={$login.isPending}
+					disabled={isLoading}
 					id="username-input"
 				/>
 				<label for="username-input">Username</label>
@@ -56,23 +55,31 @@
 					required
 					type="password"
 					placeholder=" "
-					disabled={$login.isPending}
+					disabled={isLoading}
 					id="password-input"
 				/>
 				<label for="password-input">Password</label>
 			</div>
 
-			{#if $login.status === "error"}
-				<div class="error">{!!$login.error && "Login failed"}</div>
-			{/if}
+			<div class="textbox">
+				<input
+					bind:value={confirmPassword}
+					required
+					type="password"
+					placeholder=" "
+					disabled={isLoading}
+					id="confirm-password-input"
+				/>
+				<label for="confirm-password-input">Confirm Password</label>
+			</div>
 
-			<button type="submit" disabled={$login.isPending}>
-				{$login.isPending ? "Logging in..." : "Login"}
+			<button type="submit" disabled={isLoading}>
+				{isLoading ? "Creating Account..." : "Register"}
 			</button>
 		</form>
 
 		<p class="footer">
-			Don't have an account? <a href={resolve("/register")}>Register!</a>
+			Already have an account? <a href={resolve("/login")}>Login!</a>
 		</p>
 	</div>
 </div>
@@ -96,8 +103,6 @@
 	}
 
 	.login {
-		position: relative;
-		z-index: 2;
 		background: rgb(0 0 0 / 10%);
 		backdrop-filter: blur(20px);
 		border-radius: 24px;
