@@ -1,25 +1,33 @@
 import { createQuery, createMutation } from "@tanstack/svelte-query";
 import type { components } from "$lib/__gen__/api_v1";
 import { apiV1 } from "$lib/api";
-import { removeToken, setToken } from "$lib/utils/token";
 
 type LoginBodyType = components["schemas"]["Body_login_api_auth_login_post"];
 
-export function useLogin() {
+export function loginUser() {
 	return createMutation({
 		mutationKey: ["login"],
 		mutationFn: async (body: LoginBodyType) => {
-			const { data } = await apiV1.POST("/api/auth/login", { body });
-			const token = (data as any)?.access_token;
+			const { data } = await apiV1.POST("/api/auth/login", {
+				headers: {
+					"content-type": "application/x-www-form-urlencoded"
+				},
+				body: body
+			});
+			const token = data?.access_token as any;
 			if (token) {
-				setToken(token);
+				await fetch("/login", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ token })
+				});
 			}
 			return data;
 		}
 	});
 }
 
-export function useAuthMe() {
+export function authMeUser() {
 	return createQuery({
 		queryKey: ["auth-me"],
 		queryFn: async () => {
@@ -29,6 +37,7 @@ export function useAuthMe() {
 	});
 }
 
-export function logout() {
-	removeToken();
+export async function logout() {
+	await fetch("/logout", { method: "POST" });
+	window.location.reload();
 }
