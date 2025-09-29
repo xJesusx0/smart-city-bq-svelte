@@ -71,6 +71,33 @@ export interface components {
 			/** Detail */
 			detail?: components["schemas"]["ValidationError"][];
 		};
+		/** Token */
+		Token: {
+			/** Access Token */
+			access_token: string;
+			/** Token Type */
+			token_type: string;
+		};
+		/** UserBase */
+		UserBase: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean | null;
+			/** Creation Date */
+			creation_date: string | null;
+			/** Update Date */
+			update_date: string | null;
+			/** Login Name */
+			login_name: string | null;
+			/** Name */
+			name: string | null;
+			/** Identification */
+			identification: string | null;
+		};
 		/** ValidationError */
 		ValidationError: {
 			/** Location */
@@ -108,7 +135,7 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": unknown;
+					"application/json": components["schemas"]["Token"];
 				};
 			};
 			/** @description Validation Error */
@@ -137,7 +164,7 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": unknown;
+					"application/json": components["schemas"]["UserBase"];
 				};
 			};
 		};

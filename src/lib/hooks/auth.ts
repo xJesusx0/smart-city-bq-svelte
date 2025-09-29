@@ -14,7 +14,7 @@ export function loginUser() {
 				},
 				body: body
 			});
-			const token = data?.access_token as any;
+			const token = data?.access_token;
 			if (token) {
 				await fetch("/login", {
 					method: "POST",

@@ -16,12 +16,13 @@
 				username,
 				password,
 				scope: "login",
-				client_id: "123",
-				client_secret: "secret",
+				client_id: null,
+				client_secret: null,
 				grant_type: "password"
 			},
 			{
-				onSuccess: () => goto(resolve("/dasboard"))
+				onSuccess: () => goto(resolve("/dashboard")),
+				onError: (error) => console.log(error)
 			}
 		);
 	}
