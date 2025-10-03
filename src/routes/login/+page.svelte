@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
-	import { loginUser } from "$lib/hooks/auth";
+	import { loginUser } from "$lib/query/auth";
 
 	let username = "";
 	let password = "";

@@ -1,6 +1,6 @@
 import { createQuery, createMutation } from "@tanstack/svelte-query";
 import type { components } from "$lib/__gen__/api_v1";
-import { apiV1 } from "$lib/api";
+import { apiV1 } from "$lib/api/api";
 
 type LoginBodyType = components["schemas"]["Body_login_api_auth_login_post"];
 

@@ -1,5 +1,5 @@
 import { redirect, type Handle } from "@sveltejs/kit";
-import { apiV1 } from "$lib/api";
+import { apiV1 } from "$lib/api/api";
 
 export const handle: Handle = async ({ event, resolve }) => {
 	let user = null;

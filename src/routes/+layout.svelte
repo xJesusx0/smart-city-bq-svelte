@@ -2,7 +2,7 @@
 	import "../app.css";
 	import favicon from "$lib/assets/favicon.svg";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
-	import { queryClient } from "$lib/query-client";
+	import { queryClient } from "$lib/api/query-client";
 
 	let { children } = $props();
 </script>
