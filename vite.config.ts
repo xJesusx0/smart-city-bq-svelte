@@ -12,5 +12,13 @@ export default defineConfig({
 			"@components": path.resolve(__dirname, "src/lib/components"),
 			"@utils": path.resolve(__dirname, "src/lib/utils")
 		}
+	},
+	server: {
+		host: true, // permite conexiones externas
+		hmr: {
+			protocol: "ws",
+			host: "localhost",
+			port: 5173
+		}
 	}
 });
