@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
+	import GoogleSignIn from "$lib/components/GoogleSignIn.svelte";
 	import { loginUser } from "$lib/query/auth";
 
 	let username = "";
@@ -72,9 +73,7 @@
 			</button>
 		</form>
 
-		<p class="footer">
-			Don't have an account? <a href={resolve("/register")}>Register!</a>
-		</p>
+		<GoogleSignIn />
 	</div>
 </div>
 

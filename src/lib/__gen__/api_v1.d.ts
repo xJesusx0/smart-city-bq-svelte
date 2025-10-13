@@ -21,6 +21,23 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/auth/login/google": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Oauth Google Login */
+		post: operations["oauth_google_login_api_auth_login_google_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/api/auth/me": {
 		parameters: {
 			query?: never;
@@ -38,10 +55,176 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/iam/users": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get All Users */
+		get: operations["get_all_users_api_iam_users_get"];
+		put?: never;
+		/** Create User */
+		post: operations["create_user_api_iam_users_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/iam/users/{user_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get User By Id */
+		get: operations["get_user_by_id_api_iam_users__user_id__get"];
+		/** Update User */
+		put: operations["update_user_api_iam_users__user_id__put"];
+		post?: never;
+		/** Delete User */
+		delete: operations["delete_user_api_iam_users__user_id__delete"];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/iam/users/me/modules": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Current User Modules */
+		get: operations["get_current_user_modules_api_iam_users_me_modules_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/charts/vehicle-timeline": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get Vehicle Timeline
+		 * @description Datos para gráfica de línea: Vehículos detectados en el tiempo
+		 */
+		get: operations["get_vehicle_timeline_api_charts_vehicle_timeline_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/charts/location-comparison": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get Location Comparison
+		 * @description Datos para gráfica de barras: Comparación de ubicaciones
+		 */
+		get: operations["get_location_comparison_api_charts_location_comparison_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/charts/vehicle-types": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get Vehicle Type Distribution
+		 * @description Datos para gráfica de pie/dona: Distribución de tipos de vehículos
+		 */
+		get: operations["get_vehicle_type_distribution_api_charts_vehicle_types_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/charts/hourly-heatmap": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get Hourly Heatmap
+		 * @description Datos para heatmap: Intensidad de tráfico por hora del día
+		 */
+		get: operations["get_hourly_heatmap_api_charts_hourly_heatmap_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/charts/summary": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get Dashboard Summary
+		 * @description Resumen para dashboard: KPIs principales
+		 */
+		get: operations["get_dashboard_summary_api_charts_summary_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
 	schemas: {
+		/**
+		 * BarDatasetResponse
+		 * @description Dataset para gráficas de barras
+		 */
+		BarDatasetResponse: {
+			/** Label */
+			label: string;
+			/** Data */
+			data: number[];
+			/** Background Color */
+			background_color: string[];
+		};
 		/** Body_login_api_auth_login_post */
 		Body_login_api_auth_login_post: {
 			/** Grant Type */
@@ -66,10 +249,112 @@ export interface components {
 			 */
 			client_secret?: string | null;
 		};
+		/**
+		 * DashboardSummaryResponse
+		 * @description Respuesta para resumen del dashboard
+		 */
+		DashboardSummaryResponse: {
+			/** Total Samples */
+			total_samples: number;
+			/** Avg Vehicles Today */
+			avg_vehicles_today: number;
+			/** Peak Hour */
+			peak_hour: string;
+			/** Most Common Vehicle */
+			most_common_vehicle: string;
+		};
+		/**
+		 * DatasetResponse
+		 * @description Dataset para gráficas de línea
+		 */
+		DatasetResponse: {
+			/** Label */
+			label: string;
+			/** Data */
+			data: number[];
+			/** Border Color */
+			border_color: string;
+			/** Background Color */
+			background_color: string;
+			/** Tension */
+			tension: number;
+		};
+		/** GoogleTokenRequest */
+		GoogleTokenRequest: {
+			/** Token */
+			token: string;
+		};
 		/** HTTPValidationError */
 		HTTPValidationError: {
 			/** Detail */
 			detail?: components["schemas"]["ValidationError"][];
+		};
+		/**
+		 * HourlyHeatmapResponse
+		 * @description Respuesta para heatmap de tráfico por hora
+		 */
+		HourlyHeatmapResponse: {
+			/** Hours */
+			hours: number[];
+			/** Days */
+			days: string[];
+			/** Data */
+			data: number[][];
+		};
+		/**
+		 * LocationComparisonResponse
+		 * @description Respuesta para comparación de ubicaciones
+		 */
+		LocationComparisonResponse: {
+			/** Labels */
+			labels: string[];
+			/** Data */
+			data: components["schemas"]["BarDatasetResponse"][];
+		};
+		/** ModuleBase */
+		ModuleBase: {
+			/** Id */
+			id?: number;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Name */
+			name: string;
+			/** Description */
+			description: string | null;
+			/** Path */
+			path: string;
+			/** Icon */
+			icon: string;
+		};
+		/**
+		 * PieDatasetResponse
+		 * @description Dataset para gráficas de pie/dona
+		 */
+		PieDatasetResponse: {
+			/** Data */
+			data: number[];
+			/** Background Color */
+			background_color: string[];
+		};
+		/**
+		 * TimeLineResponse
+		 * @description Respuesta para gráfica de timeline
+		 */
+		TimeLineResponse: {
+			/** Labels */
+			labels: string[];
+			/** Data */
+			data: components["schemas"]["DatasetResponse"][];
 		};
 		/** Token */
 		Token: {
@@ -81,22 +366,85 @@ export interface components {
 		/** UserBase */
 		UserBase: {
 			/** Id */
-			id?: number | null;
+			id?: number;
 			/**
 			 * Active
 			 * @default true
 			 */
-			active: boolean | null;
-			/** Creation Date */
-			creation_date: string | null;
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
 			/** Update Date */
-			update_date: string | null;
+			update_date?: string | null;
 			/** Login Name */
-			login_name: string | null;
+			login_name: string;
 			/** Name */
-			name: string | null;
+			name: string;
 			/** Identification */
-			identification: string | null;
+			identification: string;
+		};
+		/** UserCreate */
+		UserCreate: {
+			/** Id */
+			id?: number;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Login Name */
+			login_name: string;
+			/** Name */
+			name: string;
+			/** Identification */
+			identification: string;
+			/** Password */
+			password: string;
+		};
+		/** UserUpdate */
+		UserUpdate: {
+			/** Login Name */
+			login_name?: string | null;
+			/** Name */
+			name?: string | null;
+		};
+		/**
+		 * UserWithModulesDTO
+		 * @description Data Transfer Object for a user, including the list of modules they have access to.
+		 */
+		UserWithModulesDTO: {
+			/** Id */
+			id?: number;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Login Name */
+			login_name: string;
+			/** Name */
+			name: string;
+			/** Identification */
+			identification: string;
+			/** Modules */
+			modules: components["schemas"]["ModuleBase"][];
 		};
 		/** ValidationError */
 		ValidationError: {
@@ -106,6 +454,16 @@ export interface components {
 			msg: string;
 			/** Error Type */
 			type: string;
+		};
+		/**
+		 * VehicleTypesResponse
+		 * @description Respuesta para distribución de tipos de vehículos
+		 */
+		VehicleTypesResponse: {
+			/** Labels */
+			labels: string[];
+			/** Data */
+			data: components["schemas"]["PieDatasetResponse"][];
 		};
 	};
 	responses: never;
@@ -149,6 +507,39 @@ export interface operations {
 			};
 		};
 	};
+	oauth_google_login_api_auth_login_google_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["GoogleTokenRequest"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["Token"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
 	me_api_auth_me_get: {
 		parameters: {
 			query?: never;
@@ -165,6 +556,344 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["UserBase"];
+				};
+			};
+		};
+	};
+	get_all_users_api_iam_users_get: {
+		parameters: {
+			query?: {
+				active?: boolean | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["UserBase"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	create_user_api_iam_users_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["UserCreate"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["UserBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_user_by_id_api_iam_users__user_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				user_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["UserBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	update_user_api_iam_users__user_id__put: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				user_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["UserUpdate"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["UserBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	delete_user_api_iam_users__user_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				user_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			204: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_current_user_modules_api_iam_users_me_modules_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["UserWithModulesDTO"];
+				};
+			};
+		};
+	};
+	get_vehicle_timeline_api_charts_vehicle_timeline_get: {
+		parameters: {
+			query?: {
+				location_id?: number | null;
+				/** @description Horas hacia atrás (máx 1 semana) */
+				hours?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["TimeLineResponse"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_location_comparison_api_charts_location_comparison_get: {
+		parameters: {
+			query?: {
+				hours?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LocationComparisonResponse"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_vehicle_type_distribution_api_charts_vehicle_types_get: {
+		parameters: {
+			query?: {
+				location_id?: number | null;
+				hours?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["VehicleTypesResponse"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_hourly_heatmap_api_charts_hourly_heatmap_get: {
+		parameters: {
+			query: {
+				location_id: number;
+				days?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HourlyHeatmapResponse"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_dashboard_summary_api_charts_summary_get: {
+		parameters: {
+			query?: {
+				location_id?: number | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["DashboardSummaryResponse"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
 				};
 			};
 		};
