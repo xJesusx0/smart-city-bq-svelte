@@ -6,9 +6,6 @@
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
 
-	let loading: boolean = false;
-	let error: string | null = null;
-
 	const login = loginWithGoogle();
 
 	onMount(() => {
