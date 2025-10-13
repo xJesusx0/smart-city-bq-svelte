@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import type { User, CredentialResponse } from "../../routes/oauth/types";
+	import type { CredentialResponse } from "../../routes/oauth/types";
 	import { GOOGLE_CLIENT_ID } from "$lib/api/const";
+	import { loginWithGoogle } from "$lib/query/auth";
+	import { goto } from "$app/navigation";
+	import { resolve } from "$app/paths";
 
-	let user: User | null = null;
 	let loading: boolean = false;
 	let error: string | null = null;
+
+	const login = loginWithGoogle();
 
 	onMount(() => {
 		// Cargar el script de Google Sign-In
@@ -48,8 +52,14 @@
 		error = null;
 
 		try {
-			// TODO: Manejar la respuesta de credenciales y autenticar al usuario
-			console.log(response);
+			const token = response.credential;
+			$login.mutate(
+				{ token },
+				{
+					onSuccess: () => goto(resolve("/dashboard")),
+					onError: (error) => console.log(error)
+				}
+			);
 		} catch (err) {
 			error = err instanceof Error ? err.message : "Error desconocido";
 			console.error("Error en login:", err);
