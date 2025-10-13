@@ -48,9 +48,6 @@
 	}
 
 	async function handleCredentialResponse(response: CredentialResponse): Promise<void> {
-		loading = true;
-		error = null;
-
 		try {
 			const token = response.credential;
 			$login.mutate(
@@ -61,10 +58,7 @@
 				}
 			);
 		} catch (err) {
-			error = err instanceof Error ? err.message : "Error desconocido";
 			console.error("Error en login:", err);
-		} finally {
-			loading = false;
 		}
 	}
 </script>
