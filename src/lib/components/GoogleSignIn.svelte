@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import type { CredentialResponse } from "../../routes/oauth/types";
 	import { GOOGLE_CLIENT_ID } from "$lib/api/const";
 	import { loginWithGoogle } from "$lib/query/auth";
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
+	import type { CredentialResponse } from "$lib/types/oauth";
 
 	const login = loginWithGoogle();
 
