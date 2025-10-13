@@ -66,5 +66,6 @@
 	#googleSignInButton {
 		display: inline-block;
 		margin-top: 20px;
+		min-height: 40px;
 	}
 </style>

@@ -194,38 +194,6 @@
 		cursor: not-allowed;
 	}
 
-	.login a {
-		font-size: 14px;
-		color: var(--color-primary);
-		text-decoration: none;
-		margin-bottom: 20px;
-		transition: color 0.3s ease;
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 0;
-	}
-
-	.login a:hover {
-		color: var(--color-primary-hover);
-	}
-
-	.login p {
-		margin: 48px 0 0;
-		font-size: 14px;
-		color: var(--color-muted);
-	}
-
-	.login p a {
-		color: var(--color-primary);
-		text-decoration: none;
-		margin: 0;
-	}
-
-	.login p a:hover {
-		color: var(--color-primary-hover);
-	}
-
 	/* Responsive design */
 	@media (max-width: 480px) {
 		.login {

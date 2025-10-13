@@ -109,6 +109,43 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/iam/roles": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get All Roles */
+		get: operations["get_all_roles_api_iam_roles_get"];
+		put?: never;
+		/** Create Role */
+		post: operations["create_role_api_iam_roles_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/iam/roles/{role_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Role By Id */
+		get: operations["get_role_by_id_api_iam_roles__role_id__get"];
+		/** Update Role */
+		put: operations["update_role_api_iam_roles__role_id__put"];
+		post?: never;
+		/** Delete Role */
+		delete: operations["delete_role_api_iam_roles__role_id__delete"];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/api/charts/vehicle-timeline": {
 		parameters: {
 			query?: never;
@@ -279,6 +316,27 @@ export interface components {
 			/** Tension */
 			tension: number;
 		};
+		/** DbRole */
+		DbRole: {
+			/** Name */
+			name: string;
+			/** Description */
+			description?: string | null;
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+		};
 		/** GoogleTokenRequest */
 		GoogleTokenRequest: {
 			/** Token */
@@ -314,7 +372,7 @@ export interface components {
 		/** ModuleBase */
 		ModuleBase: {
 			/** Id */
-			id?: number;
+			id?: number | null;
 			/**
 			 * Active
 			 * @default true
@@ -346,6 +404,20 @@ export interface components {
 			/** Background Color */
 			background_color: string[];
 		};
+		/** RoleCreate */
+		RoleCreate: {
+			/** Name */
+			name: string;
+			/** Description */
+			description?: string | null;
+		};
+		/** RoleUpdate */
+		RoleUpdate: {
+			/** Name */
+			name?: string | null;
+			/** Description */
+			description?: string | null;
+		};
 		/**
 		 * TimeLineResponse
 		 * @description Respuesta para gráfica de timeline
@@ -366,7 +438,7 @@ export interface components {
 		/** UserBase */
 		UserBase: {
 			/** Id */
-			id?: number;
+			id?: number | null;
 			/**
 			 * Active
 			 * @default true
@@ -379,8 +451,8 @@ export interface components {
 			creation_date?: string;
 			/** Update Date */
 			update_date?: string | null;
-			/** Login Name */
-			login_name: string;
+			/** Email */
+			email: string;
 			/** Name */
 			name: string;
 			/** Identification */
@@ -389,7 +461,7 @@ export interface components {
 		/** UserCreate */
 		UserCreate: {
 			/** Id */
-			id?: number;
+			id?: number | null;
 			/**
 			 * Active
 			 * @default true
@@ -402,8 +474,8 @@ export interface components {
 			creation_date?: string;
 			/** Update Date */
 			update_date?: string | null;
-			/** Login Name */
-			login_name: string;
+			/** Email */
+			email: string;
 			/** Name */
 			name: string;
 			/** Identification */
@@ -413,8 +485,8 @@ export interface components {
 		};
 		/** UserUpdate */
 		UserUpdate: {
-			/** Login Name */
-			login_name?: string | null;
+			/** Email */
+			email?: string | null;
 			/** Name */
 			name?: string | null;
 		};
@@ -424,7 +496,7 @@ export interface components {
 		 */
 		UserWithModulesDTO: {
 			/** Id */
-			id?: number;
+			id?: number | null;
 			/**
 			 * Active
 			 * @default true
@@ -437,8 +509,8 @@ export interface components {
 			creation_date?: string;
 			/** Update Date */
 			update_date?: string | null;
-			/** Login Name */
-			login_name: string;
+			/** Email */
+			email: string;
 			/** Name */
 			name: string;
 			/** Identification */
@@ -735,6 +807,154 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["UserWithModulesDTO"];
+				};
+			};
+		};
+	};
+	get_all_roles_api_iam_roles_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["DbRole"][];
+				};
+			};
+		};
+	};
+	create_role_api_iam_roles_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["RoleCreate"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["DbRole"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_role_by_id_api_iam_roles__role_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				role_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["DbRole"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	update_role_api_iam_roles__role_id__put: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				role_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["RoleUpdate"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["DbRole"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	delete_role_api_iam_roles__role_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				role_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			204: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
 				};
 			};
 		};
