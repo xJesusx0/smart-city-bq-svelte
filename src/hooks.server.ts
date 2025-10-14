@@ -1,12 +1,18 @@
-import { redirect, type Handle } from "@sveltejs/kit";
 import { createServerApiClient } from "$lib/api/api";
+import { redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	// RUTAS PÚBLICAS (sin autenticación requerida)
-	const publicRoutes = ["/", "/login", "/register"];
-	const isPublicRoute = publicRoutes.some((route) => event.url.pathname === route);
+	const publicRoutes = ["/", "/login", "/register", "/404"];
 
-	const isUnauthorizedRoute = event.url.pathname === "/unauthorized";
+	const pathName = event.url.pathname;
+	const routeId = event.route.id;
+
+	const isPublicRoute = publicRoutes.some((route) => pathName === route);
+	const isUnauthorizedRoute = pathName === "/unauthorized";
+
+	if (!routeId) {
+		throw redirect(303, "/404");
+	}
 
 	// Si es ruta pública, dejar pasar
 	if (isPublicRoute) {

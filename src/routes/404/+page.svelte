@@ -32,9 +32,7 @@
 
 		<!-- Información del error -->
 		<div class="rounded-lg border bg-card p-4 text-center">
-			<p class="mb-2 text-sm text-muted-foreground">
-				Verifica la URL o regresa a la página principal
-			</p>
+			<p class="text-sm text-muted-foreground">Verifica la URL o regresa a la página principal</p>
 		</div>
 
 		<!-- Acciones -->

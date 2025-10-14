@@ -43,6 +43,7 @@ export function authMeUser() {
 
 export async function logout() {
 	await fetch("/logout", { method: "POST" });
+	localStorage.removeItem(TOKEN_KEY);
 	window.location.reload();
 }
 
