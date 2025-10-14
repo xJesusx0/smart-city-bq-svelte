@@ -5,6 +5,7 @@
 	import { queryClient } from "$lib/api/query-client";
 	import { userStore } from "$lib/stores/user";
 	import FloatingThemeToggle from "$lib/components/floating-theme-toggle.svelte";
+	import { ModeWatcher } from "mode-watcher";
 	import type { LayoutData } from "./$types";
 	import { onMount, type Snippet } from "svelte";
 
@@ -26,5 +27,6 @@
 
 <QueryClientProvider client={queryClient}>
 	{@render children()}
+	<ModeWatcher />
 	<FloatingThemeToggle />
 </QueryClientProvider>
