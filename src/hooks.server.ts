@@ -36,11 +36,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const { data, error } = await api.GET("/api/auth/me");
 
 		if (error || !data) {
-			// Token inválido → limpiar cookie y redirigir
+			// Token inválido → limpiar cookie y redirigir con parámetro de limpieza
 			console.warn(`Token inválido o error en /auth/me`);
 			event.cookies.delete(TOKEN_KEY, { path: "/" });
 
-			return redirect(303, "/login");
+			return redirect(303, "/login?clear=true");
 		}
 
 		// Usuario autenticado correctamente
@@ -73,6 +73,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.error("Error validando usuario en hooks.server.ts:", err);
 		event.cookies.delete(TOKEN_KEY, { path: "/" });
 
-		return redirect(303, "/login");
+		return redirect(303, "/login?clear=true");
 	}
 };
