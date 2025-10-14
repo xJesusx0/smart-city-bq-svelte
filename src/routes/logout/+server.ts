@@ -1,7 +1,8 @@
+import { TOKEN_KEY } from "$lib/api/const";
 import { json, type RequestEvent } from "@sveltejs/kit";
 
 export async function POST({ cookies }: RequestEvent) {
-	cookies.set("auth_token", "", {
+	cookies.set(TOKEN_KEY, "", {
 		httpOnly: true,
 		sameSite: "strict",
 		secure: process.env.NODE_ENV === "production",
