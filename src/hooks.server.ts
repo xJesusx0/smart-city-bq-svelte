@@ -1,4 +1,5 @@
 import { createServerApiClient } from "$lib/api/api";
+import { TOKEN_KEY } from "$lib/api/const";
 import { redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -21,7 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	// TODAS LAS DEMÁS RUTAS REQUIEREN AUTENTICACIÓN
-	const token = event.cookies.get("auth_token");
+	const token = event.cookies.get(TOKEN_KEY);
 
 	// Sin token → redirigir a login
 	if (!token) {
@@ -35,10 +36,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const { data, error } = await api.GET("/api/auth/me");
 
 		if (error || !data) {
-			// Token inválido → limpiar y redirigir
+			// Token inválido → limpiar cookie y redirigir con parámetro de limpieza
 			console.warn(`Token inválido o error en /auth/me`);
-			event.cookies.delete("auth_token", { path: "/" });
-			return redirect(303, "/login");
+			event.cookies.delete(TOKEN_KEY, { path: "/" });
+
+			return redirect(303, "/login?clear=true");
 		}
 
 		// Usuario autenticado correctamente
@@ -69,7 +71,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 
 		console.error("Error validando usuario en hooks.server.ts:", err);
-		event.cookies.delete("auth_token", { path: "/" });
-		return redirect(303, "/login");
+		event.cookies.delete(TOKEN_KEY, { path: "/" });
+
+		return redirect(303, "/login?clear=true");
 	}
 };
