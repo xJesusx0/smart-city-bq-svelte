@@ -1,27 +1,75 @@
+import { createServerApiClient } from "$lib/api/api";
 import { redirect, type Handle } from "@sveltejs/kit";
-import { apiV1 } from "$lib/api/api";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	let user = null;
-	const protectedRoutes = ["/dashboard"];
-	const isProtected = protectedRoutes.some((route) => event.url.pathname.startsWith(route));
+	const publicRoutes = ["/", "/login", "/register", "/404"];
 
-	if (isProtected) {
-		const token = event.cookies.get("auth_token");
-		if (token) {
-			try {
-				const { data } = await apiV1.GET("/api/auth/me", {
-					headers: { Authorization: `Bearer ${token}` }
-				});
-				user = data;
-			} catch {
-				user = null;
-			}
-		}
-		if (!user) {
+	const pathName = event.url.pathname;
+	const routeId = event.route.id;
+
+	const isPublicRoute = publicRoutes.some((route) => pathName === route);
+	const isUnauthorizedRoute = pathName === "/unauthorized";
+
+	if (!routeId) {
+		throw redirect(303, "/404");
+	}
+
+	// Si es ruta pública, dejar pasar
+	if (isPublicRoute) {
+		event.locals.user = null;
+		return await resolve(event);
+	}
+
+	// TODAS LAS DEMÁS RUTAS REQUIEREN AUTENTICACIÓN
+	const token = event.cookies.get("auth_token");
+
+	// Sin token → redirigir a login
+	if (!token) {
+		console.warn(`Acceso sin token a: ${event.url.pathname}`);
+		return redirect(303, "/login");
+	}
+
+	// VALIDAR TOKEN Y OBTENER PERMISOS
+	try {
+		const api = createServerApiClient(token);
+		const { data, error } = await api.GET("/api/auth/me");
+
+		if (error || !data) {
+			// Token inválido → limpiar y redirigir
+			console.warn(`Token inválido o error en /auth/me`);
+			event.cookies.delete("auth_token", { path: "/" });
 			return redirect(303, "/login");
 		}
+
+		// Usuario autenticado correctamente
+		event.locals.user = data;
+
+		if (isUnauthorizedRoute) {
+			return await resolve(event);
+		}
+
+		// VALIDAR PERMISOS DE RUTA
+		const currentPath = event.url.pathname;
+
+		// Verificar si el usuario tiene acceso a esta ruta
+		const hasAccess = data.modules.some((module) => currentPath.startsWith(module.path));
+
+		if (!hasAccess) {
+			// Usuario autenticado pero sin permisos para esta ruta
+			console.warn(`Usuario ${data.email} sin acceso a ${currentPath}`);
+			console.warn(`Módulos permitidos:`, data.modules.map((m) => m.path).join(", "));
+			return redirect(303, "/unauthorized");
+		}
+
+		//  Usuario tiene acceso a esta ruta
+		return await resolve(event);
+	} catch (err) {
+		if (err && typeof err === "object" && "status" in err && "location" in err) {
+			throw err;
+		}
+
+		console.error("Error validando usuario en hooks.server.ts:", err);
+		event.cookies.delete("auth_token", { path: "/" });
+		return redirect(303, "/login");
 	}
-	event.locals.user = user;
-	return await resolve(event);
 };
