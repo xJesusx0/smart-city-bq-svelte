@@ -1,3 +1,4 @@
+import { TOKEN_KEY } from "$lib/api/const";
 import { json, type RequestEvent } from "@sveltejs/kit";
 
 export async function POST({ cookies }: RequestEvent) {
@@ -8,5 +9,6 @@ export async function POST({ cookies }: RequestEvent) {
 		path: "/",
 		maxAge: 0
 	});
+	localStorage.setItem(TOKEN_KEY, "");
 	return json({ success: true });
 }
