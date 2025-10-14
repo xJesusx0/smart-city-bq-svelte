@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-	<title>Pagina no Encontrada - Smart City</title>
+	<title>Página no Encontrada - Smart City</title>
 </svelte:head>
 
 <div class="flex min-h-screen items-center justify-center bg-background p-4">
@@ -26,7 +26,7 @@
 			>
 				<FileX class="h-8 w-8 text-destructive" />
 			</div>
-			<h1 class="text-2xl font-bold text-foreground">Pagina no Encontrada</h1>
+			<h1 class="text-2xl font-bold text-foreground">Página no Encontrada</h1>
 			<p class="mt-2 text-muted-foreground">La página que buscas no existe o ha sido movida</p>
 		</div>
 
