@@ -92,23 +92,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/api/iam/users/me/modules": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Get Current User Modules */
-		get: operations["get_current_user_modules_api_iam_users_me_modules_get"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	"/api/iam/roles": {
 		parameters: {
 			query?: never;
@@ -318,10 +301,6 @@ export interface components {
 		};
 		/** DbRole */
 		DbRole: {
-			/** Name */
-			name: string;
-			/** Description */
-			description?: string | null;
 			/** Id */
 			id?: number | null;
 			/**
@@ -336,6 +315,10 @@ export interface components {
 			creation_date?: string;
 			/** Update Date */
 			update_date?: string | null;
+			/** Name */
+			name: string;
+			/** Description */
+			description?: string | null;
 		};
 		/** GoogleTokenRequest */
 		GoogleTokenRequest: {
@@ -404,8 +387,43 @@ export interface components {
 			/** Background Color */
 			background_color: string[];
 		};
+		/** RoleBase */
+		RoleBase: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Name */
+			name: string;
+			/** Description */
+			description?: string | null;
+		};
 		/** RoleCreate */
 		RoleCreate: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
 			/** Name */
 			name: string;
 			/** Description */
@@ -480,6 +498,8 @@ export interface components {
 			name: string;
 			/** Identification */
 			identification: string;
+			/** Roles */
+			roles: number[];
 			/** Password */
 			password: string;
 		};
@@ -489,6 +509,8 @@ export interface components {
 			email?: string | null;
 			/** Name */
 			name?: string | null;
+			/** Roles */
+			roles?: number[] | null;
 		};
 		/**
 		 * UserWithModulesDTO
@@ -517,6 +539,8 @@ export interface components {
 			identification: string;
 			/** Modules */
 			modules: components["schemas"]["ModuleBase"][];
+			/** Roles */
+			roles: components["schemas"]["RoleBase"][];
 		};
 		/** ValidationError */
 		ValidationError: {
@@ -627,7 +651,7 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": components["schemas"]["UserBase"];
+					"application/json": components["schemas"]["UserWithModulesDTO"];
 				};
 			};
 		};
@@ -787,26 +811,6 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["HTTPValidationError"];
-				};
-			};
-		};
-	};
-	get_current_user_modules_api_iam_users_me_modules_get: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description Successful Response */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"application/json": components["schemas"]["UserWithModulesDTO"];
 				};
 			};
 		};

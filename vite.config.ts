@@ -12,5 +12,11 @@ export default defineConfig({
 			"@components": path.resolve(__dirname, "src/lib/components"),
 			"@utils": path.resolve(__dirname, "src/lib/utils")
 		}
+	},
+	ssr: {
+		noExternal: ["bits-ui"]
+	},
+	optimizeDeps: {
+		include: ["bits-ui"]
 	}
 });
