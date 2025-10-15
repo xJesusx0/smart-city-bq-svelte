@@ -1,11 +1,38 @@
-import { TOKEN_KEY } from "./const";
+import { browser } from "$app/environment";
+import Cookies from "universal-cookie";
+import { ISPROD } from "./const";
 
-export function clearAuthTokens(): void {
-	if (typeof window !== "undefined") {
-		// Limpiar localStorage
-		localStorage.removeItem(TOKEN_KEY);
+const cookies = new Cookies();
 
-		// Limpiar cookie llamando al endpoint de logout
-		fetch("/logout", { method: "POST" }).catch(console.error);
-	}
+interface CookieOptions {
+	maxAge?: number;
+	expires?: Date;
+	path?: string;
+	domain?: string;
+	secure?: boolean;
+	sameSite?: "strict" | "lax" | "none";
 }
+
+export const setCookie = (name: string, value: string, options?: CookieOptions) => {
+	if (browser) {
+		cookies.set(name, value, {
+			path: "/",
+			sameSite: "strict",
+			secure: ISPROD,
+			...options
+		});
+	}
+};
+
+export const getCookie = (name: string) => {
+	if (browser) {
+		return cookies.get(name);
+	}
+	return null;
+};
+
+export const deleteCookie = (name: string) => {
+	if (browser) {
+		cookies.remove(name, { path: "/" });
+	}
+};

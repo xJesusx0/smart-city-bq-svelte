@@ -58,7 +58,7 @@
 	}
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="p-8">
 	<div class="mb-8 flex items-center justify-between">
 		<div>
 			<h1 class="text-3xl font-bold tracking-tight">Administración de Usuarios</h1>

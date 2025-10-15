@@ -1,8 +1,8 @@
-import { createQuery, createMutation } from "@tanstack/svelte-query";
 import type { components } from "$lib/__gen__/api_v1";
-import { apiV1 } from "$lib/api/api";
+import { apiV1, apiV1Auth } from "$lib/api/api";
 import { TOKEN_KEY } from "$lib/api/const";
-import { clearAuthTokens } from "$lib/api/helpers";
+import { deleteCookie, setCookie } from "$lib/api/helpers";
+import { createMutation, createQuery } from "@tanstack/svelte-query";
 
 type LoginBodyType = components["schemas"]["Body_login_api_auth_login_post"];
 type GoogleTokenRequest = components["schemas"]["GoogleTokenRequest"];
@@ -11,28 +11,24 @@ export function loginUser() {
 	return createMutation({
 		mutationKey: ["login"],
 		mutationFn: async (body: LoginBodyType) => {
-			const { data, error } = await apiV1.POST("/api/auth/login", {
-				headers: {
-					"content-type": "application/x-www-form-urlencoded"
-				},
+			const { data, error, response } = await apiV1Auth.POST("/api/auth/login", {
 				body: body
 			});
 
-			if (error) {
-				clearAuthTokens();
+			if (error || !response.ok) {
 				throw new Error("Login failed");
 			}
 
 			const token = data?.access_token;
 			if (token) {
-				localStorage.setItem(TOKEN_KEY, token);
-
+				setCookie(TOKEN_KEY, token);
 				await fetch("/login", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ token })
 				});
 			}
+
 			return data;
 		}
 	});
@@ -58,8 +54,9 @@ export function authMeUser() {
 }
 
 export async function logout() {
-	clearAuthTokens();
-	window.location.reload();
+	deleteCookie(TOKEN_KEY);
+	await fetch("/logout", { method: "POST" });
+	window.location.href = "/login";
 }
 
 export function loginWithGoogle() {
@@ -69,13 +66,12 @@ export function loginWithGoogle() {
 			const { data, error } = await apiV1.POST("/api/auth/login/google", { body: body });
 
 			if (error) {
-				clearAuthTokens();
 				throw new Error("Google login failed");
 			}
 
 			const token = data?.access_token;
 			if (token) {
-				localStorage.setItem(TOKEN_KEY, token);
+				setCookie(TOKEN_KEY, token);
 
 				await fetch("/login", {
 					method: "POST",
