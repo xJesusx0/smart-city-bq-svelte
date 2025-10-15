@@ -3,7 +3,7 @@ import { TOKEN_KEY } from "$lib/api/const";
 import { redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const publicRoutes = ["/", "/login", "/register", "/404"];
+	const publicRoutes = ["/", "/login", "/register", "/404", "/logout"];
 
 	const pathName = event.url.pathname;
 	const routeId = event.route.id;
@@ -38,8 +38,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (error || !data) {
 			// Token inválido → limpiar cookie y redirigir con parámetro de limpieza
 			console.warn(`Token inválido o error en /auth/me`);
-			event.cookies.delete(TOKEN_KEY, { path: "/" });
 
+			event.cookies.delete(TOKEN_KEY, { path: "/" });
 			return redirect(303, "/login?clear=true");
 		}
 
@@ -50,16 +50,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return await resolve(event);
 		}
 
-		// VALIDAR PERMISOS DE RUTA
-		const currentPath = event.url.pathname;
-
 		// Verificar si el usuario tiene acceso a esta ruta
-		const hasAccess = data.modules.some((module) => currentPath.startsWith(module.path));
+		const hasAccess = data.modules.some((module) => pathName.startsWith(module.path));
 
 		if (!hasAccess) {
 			// Usuario autenticado pero sin permisos para esta ruta
-			console.warn(`Usuario ${data.email} sin acceso a ${currentPath}`);
-			console.warn(`Módulos permitidos:`, data.modules.map((m) => m.path).join(", "));
+			console.warn(`Usuario ${data.email} sin acceso a ${pathName}`);
 			return redirect(303, "/unauthorized");
 		}
 
@@ -71,8 +67,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 
 		console.error("Error validando usuario en hooks.server.ts:", err);
-		event.cookies.delete(TOKEN_KEY, { path: "/" });
 
+		event.cookies.delete(TOKEN_KEY, { path: "/" });
 		return redirect(303, "/login?clear=true");
 	}
 };
