@@ -6,7 +6,7 @@ export async function POST({ request, cookies }: RequestEvent) {
 
 	const isProd = process.env.NODE_ENV === "production";
 	cookies.set(TOKEN_KEY, token, {
-		httpOnly: true,
+		httpOnly: false, // Permitir acceso desde JavaScript
 		sameSite: "strict",
 		secure: isProd,
 		path: "/",

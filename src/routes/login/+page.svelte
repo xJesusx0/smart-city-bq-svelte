@@ -1,27 +1,13 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
-	import { onMount } from "svelte";
 	import GoogleSignIn from "$lib/components/GoogleSignIn.svelte";
 	import { loginUser } from "$lib/query/auth";
-	import { clearAuthTokens } from "$lib/api/helpers";
 
 	let username = "";
 	let password = "";
 
 	const login = loginUser();
-
-	onMount(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		if (urlParams.get("clear") === "true") {
-			console.warn("Token inválido detectado, limpiando localStorage");
-			clearAuthTokens();
-
-			const url = new URL(window.location.href);
-			url.searchParams.delete("clear");
-			window.history.replaceState({}, "", url.toString());
-		}
-	});
 
 	function onSubmit(event: Event) {
 		event.preventDefault();
