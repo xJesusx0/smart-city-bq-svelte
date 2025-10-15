@@ -1,24 +1,38 @@
-import { browser } from '$app/environment';
+import { browser } from "$app/environment";
+import Cookies from "universal-cookie";
+import { ISPROD } from "./const";
 
-// Funciones simples para manejar cookies usando APIs nativas del navegador
-export const setCookie = (name: string, value: string) => {
+const cookies = new Cookies();
+
+interface CookieOptions {
+	maxAge?: number;
+	expires?: Date;
+	path?: string;
+	domain?: string;
+	secure?: boolean;
+	sameSite?: "strict" | "lax" | "none";
+}
+
+export const setCookie = (name: string, value: string, options?: CookieOptions) => {
 	if (browser) {
-		document.cookie = `${name}=${value};path=/;SameSite=Strict`;
+		cookies.set(name, value, {
+			path: "/",
+			sameSite: "strict",
+			secure: ISPROD,
+			...options
+		});
 	}
 };
 
 export const getCookie = (name: string) => {
 	if (browser) {
-		return document.cookie
-			.split('; ')
-			.find(row => row.startsWith(name + '='))
-			?.split('=')[1];
+		return cookies.get(name);
 	}
 	return null;
 };
 
 export const deleteCookie = (name: string) => {
 	if (browser) {
-		document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+		cookies.remove(name, { path: "/" });
 	}
 };
