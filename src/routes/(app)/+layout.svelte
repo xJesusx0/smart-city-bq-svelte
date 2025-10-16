@@ -10,7 +10,7 @@
 
 <SidebarProvider>
 	<NavigationSidebar {data} />
-	<main class="flex-1">
+    <main class="flex-1 min-w-0">
 		<NavigationSheet {data} />
 		{@render children()}
 	</main>

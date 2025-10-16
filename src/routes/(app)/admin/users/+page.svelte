@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createUsersQuery } from "$lib/query/users";
+	import { getUsersQuery } from "$lib/query/users";
 	import {
 		Table,
 		TableBody,
@@ -15,17 +15,17 @@
 	import { Pencil, Trash2, UserPlus } from "@lucide/svelte";
 	import type { components } from "$lib/__gen__/api_v1";
 
-	type UserBase = components["schemas"]["UserBase"];
+	type UserWithRoles = components["schemas"]["UserWithRolesDTO"];
 
 	// State
 	let showCreateDialog = false;
 	let showEditDialog = false;
 	let showDeleteDialog = false;
-	let selectedUser: UserBase | null = null;
+	let selectedUser: UserWithRoles | null = null;
 	let filterActive: boolean | null = null;
 
 	// Query
-	$: usersQuery = createUsersQuery({ active: filterActive });
+	$: usersQuery = getUsersQuery({ active: filterActive });
 
 	$: users = $usersQuery.data || [];
 
@@ -34,12 +34,12 @@
 		showCreateDialog = true;
 	}
 
-	function handleEdit(user: UserBase) {
+	function handleEdit(user: UserWithRoles) {
 		selectedUser = user;
 		showEditDialog = true;
 	}
 
-	function handleDelete(user: UserBase) {
+	function handleDelete(user: UserWithRoles) {
 		selectedUser = user;
 		showDeleteDialog = true;
 	}
@@ -94,7 +94,7 @@
 		</Button>
 	</div>
 
-	<div class="overflow-hidden rounded-lg border">
+	<div class="w-full overflow-x-auto rounded-lg border">
 		{#if $usersQuery.isLoading}
 			<div class="p-8 text-center">
 				<p class="text-muted-foreground">Cargando usuarios...</p>
