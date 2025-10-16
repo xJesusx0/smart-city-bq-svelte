@@ -59,8 +59,11 @@
 					{#each allowedModules as module (module.id)}
 						{@const IconComponent = getModuleIcon(module.icon)}
 						<SidebarMenuItem>
-							<SidebarMenuButton tooltipContent={module.name}>
-								<a href={module.path} class="flex items-center gap-2">
+							<SidebarMenuButton tooltipContent={module.name} class="h-8 p-0">
+								<a
+									href={module.path}
+									class="flex h-full w-full items-center justify-start gap-2 p-2"
+								>
 									<IconComponent class="size-4" />
 									<span class="group-data-[collapsible=icon]:hidden">{module.name}</span>
 								</a>

@@ -40,7 +40,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			console.warn(`Token inválido o error en /auth/me`);
 
 			event.cookies.delete(TOKEN_KEY, { path: "/" });
-			return redirect(303, "/login?clear=true");
+			return redirect(303, "/login");
 		}
 
 		// Usuario autenticado correctamente
@@ -51,7 +51,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 
 		// Verificar si el usuario tiene acceso a esta ruta
-		const hasAccess = data.modules.some((module) => pathName.startsWith(module.path));
+		const hasAccess = data.modules.some(
+			(module) => pathName.startsWith(module.path) && module.active
+		);
 
 		if (!hasAccess) {
 			// Usuario autenticado pero sin permisos para esta ruta
@@ -69,6 +71,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.error("Error validando usuario en hooks.server.ts:", err);
 
 		event.cookies.delete(TOKEN_KEY, { path: "/" });
-		return redirect(303, "/login?clear=true");
+		return redirect(303, "/login");
 	}
 };

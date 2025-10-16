@@ -14,7 +14,7 @@
 	import { createRolesQuery } from "$lib/query/roles";
 	import type { components } from "$lib/__gen__/api_v1";
 
-	type UserBase = components["schemas"]["UserBase"];
+	type UserBaseWithRoles = components["schemas"]["UserWithRolesDTO"];
 
 	let {
 		open = $bindable(false),
@@ -22,7 +22,7 @@
 		onSuccess = () => {}
 	}: {
 		open?: boolean;
-		user?: UserBase | null;
+		user?: UserBaseWithRoles | null;
 		onSuccess?: () => void;
 	} = $props();
 
@@ -34,7 +34,6 @@
 	let identification = $state(user?.identification || "");
 	let password = $state("");
 	let selectedRoleIds = $state<number[]>([]);
-
 	// Update form when user changes
 	$effect(() => {
 		if (user) {
@@ -42,6 +41,7 @@
 			name = user.name || "";
 			identification = user.identification || "";
 			password = "";
+			selectedRoleIds = user.roles?.map((role) => role.id!) || [];
 		}
 	});
 
@@ -63,7 +63,6 @@
 	async function handleSubmit() {
 		try {
 			if (isEdit && user) {
-				// Preparar el payload de actualización
 				const updatePayload: {
 					email?: string | null;
 					name?: string | null;
@@ -80,11 +79,11 @@
 				});
 			} else {
 				if (!password) {
-					alert("La contraseña es requerida para crear un usuario");
+					console.error("La contraseña es requerida para crear un usuario");
 					return;
 				}
 				if (selectedRoleIds.length === 0) {
-					alert("Debes seleccionar al menos un rol para el usuario");
+					console.error("Debes seleccionar al menos un rol para el usuario");
 					return;
 				}
 				await $createUserMutation.mutateAsync({
@@ -100,7 +99,6 @@
 			open = false;
 			onSuccess();
 
-			// Reset form
 			email = "";
 			name = "";
 			identification = "";
@@ -108,13 +106,26 @@
 			selectedRoleIds = [];
 		} catch (error) {
 			console.error("Error saving user:", error);
-			alert("Error al guardar el usuario");
+		}
+	}
+
+	async function toggleActiveUser() {
+		if (!user) return;
+		try {
+			const nextActive = !user.active;
+			await $updateUserMutation.mutateAsync({
+				userId: user.id!,
+				user: { active: nextActive }
+			});
+			user = { ...user, active: nextActive } as UserBaseWithRoles;
+			onSuccess();
+		} catch (error) {
+			console.error("Error toggling user active state:", error);
 		}
 	}
 
 	function handleClose() {
 		open = false;
-		// Reset form
 		email = "";
 		name = "";
 		identification = "";
@@ -159,7 +170,7 @@
 						id="identification"
 						type="text"
 						bind:value={identification}
-						placeholder="DNI/NIE"
+						placeholder="CC/TI"
 						required
 					/>
 				</div>
@@ -176,11 +187,22 @@
 				</div>
 			{/if}
 
+			{#if isEdit && user && !user.active}
+				<Button
+					type="button"
+					variant="outline"
+					onclick={toggleActiveUser}
+					disabled={$updateUserMutation.isPending}
+				>
+					Activar usuario
+				</Button>
+			{/if}
+
 			<div class="space-y-2">
-				<Label>Roles <span class="text-red-500">*</span></Label>
+				<Label>Roles</Label>
 				<p class="text-sm text-muted-foreground">
 					{#if isEdit}
-						Actualiza los roles del usuario (dejar vacío para mantener los actuales)
+						Actualiza los roles del usuario.
 					{:else}
 						Selecciona uno o más roles para el usuario
 					{/if}
@@ -202,22 +224,6 @@
 								</Badge>
 							</button>
 						{/each}
-					</div>
-					<div class="mt-2 flex items-center gap-2">
-						<p class="text-xs text-muted-foreground">
-							{#if selectedRoleIds.length === 0}
-								{#if isEdit}
-									No hay cambios en roles
-								{:else}
-									Ningún rol seleccionado
-								{/if}
-							{:else}
-								✓ Seleccionados ({selectedRoleIds.length}): {roles
-									.filter((r) => selectedRoleIds.includes(r.id!))
-									.map((r) => r.name)
-									.join(", ")}
-							{/if}
-						</p>
 					</div>
 				{/if}
 			</div>

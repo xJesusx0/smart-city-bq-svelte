@@ -33,7 +33,6 @@
 			onSuccess();
 		} catch (error) {
 			console.error("Error deleting user:", error);
-			alert("Error al eliminar el usuario");
 		}
 	}
 </script>

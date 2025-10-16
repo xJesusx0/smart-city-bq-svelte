@@ -1,10 +1,11 @@
-import { LayoutDashboard, ChartColumnIncreasing, ShieldUser, Dot } from "@lucide/svelte";
+import { House, ChartColumnIncreasing, ShieldUser, Dot, Settings } from "@lucide/svelte";
 
 // Mapa de iconos disponibles para módulos
 export const MODULE_ICONS = {
-	LayoutDashboard,
+	House,
 	ChartColumnIncreasing,
 	ShieldUser,
+	Settings,
 	Dot // Icono por defecto
 } as const;
 

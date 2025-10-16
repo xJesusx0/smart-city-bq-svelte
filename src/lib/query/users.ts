@@ -14,23 +14,23 @@ export const usersKeys = {
 	detail: (id: number) => [...usersKeys.details(), id] as const
 };
 
-export function createUsersQuery(filters?: { active?: boolean | null }) {
+export function getUsersQuery(filters?: { active?: boolean | null }) {
 	return createQuery({
 		queryKey: usersKeys.list(filters),
 		queryFn: async () => {
-			const { data, error } = await apiV1.GET("/api/iam/users", {
+			const { data, error } = await apiV1.GET("/api/iam/users/with-roles", {
 				params: {
 					query: filters
 				}
 			});
 
 			if (error) throw new Error("Error fetching users");
-			return data as UserBase[];
+			return data;
 		}
 	});
 }
 
-export function createUserQuery(userId: number) {
+export function getUserQuery(userId: number) {
 	return createQuery({
 		queryKey: usersKeys.detail(userId),
 		queryFn: async () => {
