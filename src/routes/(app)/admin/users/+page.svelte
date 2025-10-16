@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getUsersQuery } from "$lib/query/users";
+	import { getUsersQuery, createUpdateUserMutation } from "$lib/query/users";
 	import {
 		Table,
 		TableBody,
@@ -12,7 +12,7 @@
 	import { Badge } from "$lib/components/ui/badge";
 	import UserDialog from "$lib/components/admin/UserDialog.svelte";
 	import DeleteUserDialog from "$lib/components/admin/DeleteUserDialog.svelte";
-	import { Pencil, Trash2, UserPlus } from "@lucide/svelte";
+	import { Pencil, Trash2, UserPlus, UserCheck } from "@lucide/svelte";
 	import type { components } from "$lib/__gen__/api_v1";
 
 	type UserWithRoles = components["schemas"]["UserWithRolesDTO"];
@@ -23,9 +23,11 @@
 	let showDeleteDialog = false;
 	let selectedUser: UserWithRoles | null = null;
 	let filterActive: boolean | null = null;
+	let activatingUserId: number | null = null;
 
 	// Query
 	$: usersQuery = getUsersQuery({ active: filterActive });
+	const updateUserMutation = createUpdateUserMutation();
 
 	$: users = $usersQuery.data || [];
 
@@ -42,6 +44,18 @@
 	function handleDelete(user: UserWithRoles) {
 		selectedUser = user;
 		showDeleteDialog = true;
+	}
+
+	async function handleActivate(user: UserWithRoles) {
+		activatingUserId = user.id!;
+		try {
+			await $updateUserMutation.mutateAsync({
+				userId: user.id!,
+				user: { active: true }
+			});
+		} finally {
+			activatingUserId = null;
+		}
 	}
 
 	function handleSuccess() {
@@ -139,12 +153,25 @@
 							<TableCell>{formatDate(user.creation_date)}</TableCell>
 							<TableCell class="text-right">
 								<div class="flex justify-end gap-2">
-									<Button variant="ghost" size="sm" onclick={() => handleEdit(user)}>
-										<Pencil class="h-4 w-4" />
-									</Button>
-									<Button variant="ghost" size="sm" onclick={() => handleDelete(user)}>
-										<Trash2 class="h-4 w-4" />
-									</Button>
+									{#if user.active}
+										<Button variant="ghost" size="sm" onclick={() => handleEdit(user)}>
+											<Pencil class="h-4 w-4" />
+										</Button>
+										<Button variant="ghost" size="sm" onclick={() => handleDelete(user)}>
+											<Trash2 class="h-4 w-4" />
+										</Button>
+									{:else}
+										<Button
+											variant="ghost"
+											size="sm"
+											title="Activar usuario"
+											disabled={activatingUserId === user.id}
+											onclick={() => handleActivate(user)}
+										>
+											<UserCheck class="h-4 w-4" />
+											{activatingUserId === user.id ? "Activando..." : "Activar"}
+										</Button>
+									{/if}
 								</div>
 							</TableCell>
 						</TableRow>

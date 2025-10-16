@@ -25,6 +25,7 @@
 	let showDeleteDialog = false;
 	let selectedRole: DbRole | null = null;
 	let filterActive: boolean | null = null;
+	let activatingRoleId: number | null = null;
 
 	// Query
 	$: rolesQuery = createRolesQuery({ active: filterActive });
@@ -53,7 +54,12 @@
 	}
 
 	async function handleActivate(role: DbRole) {
-		await $updateMutation.mutateAsync({ roleId: role.id!, role: { active: true } });
+		activatingRoleId = role.id!;
+		try {
+			await $updateMutation.mutateAsync({ roleId: role.id!, role: { active: true } });
+		} finally {
+			activatingRoleId = null;
+		}
 	}
 
 	function handleSuccess() {
@@ -170,9 +176,11 @@
 											variant="ghost"
 											size="sm"
 											title="Activar rol"
+											disabled={activatingRoleId === role.id}
 											onclick={() => handleActivate(role)}
 										>
-											<ShieldCheck class="h-4 w-4" /> Activar
+											<ShieldCheck class="h-4 w-4" />
+											{activatingRoleId === role.id ? "Activando..." : "Activar"}
 										</Button>
 									{/if}
 								</div>
