@@ -73,6 +73,23 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/iam/users/with-roles": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get All Users With Roles */
+		get: operations["get_all_users_with_roles_api_iam_users_with_roles_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/api/iam/users/{user_id}": {
 		parameters: {
 			query?: never;
@@ -124,6 +141,94 @@ export interface paths {
 		post?: never;
 		/** Delete Role */
 		delete: operations["delete_role_api_iam_roles__role_id__delete"];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/iam/roles/with-modules": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get All Roles With Modules */
+		get: operations["get_all_roles_with_modules_api_iam_roles_with_modules_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/iam/modules": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get All Modules */
+		get: operations["get_all_modules_api_iam_modules_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/iam/modules/{module_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Module By Id */
+		get: operations["get_module_by_id_api_iam_modules__module_id__get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/traffic/locations": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get All Locations */
+		get: operations["get_all_locations_api_traffic_locations_get"];
+		put?: never;
+		/** Create Location */
+		post: operations["create_location_api_traffic_locations_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/traffic/locations/{location_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Location By Id */
+		get: operations["get_location_by_id_api_traffic_locations__location_id__get"];
+		/** Update Location */
+		put: operations["update_location_api_traffic_locations__location_id__put"];
+		post?: never;
+		/** Delete Location */
+		delete: operations["delete_location_api_traffic_locations__location_id__delete"];
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -299,27 +404,6 @@ export interface components {
 			/** Tension */
 			tension: number;
 		};
-		/** DbRole */
-		DbRole: {
-			/** Id */
-			id?: number | null;
-			/**
-			 * Active
-			 * @default true
-			 */
-			active: boolean;
-			/**
-			 * Creation Date
-			 * Format: date-time
-			 */
-			creation_date?: string;
-			/** Update Date */
-			update_date?: string | null;
-			/** Name */
-			name: string;
-			/** Description */
-			description?: string | null;
-		};
 		/** GoogleTokenRequest */
 		GoogleTokenRequest: {
 			/** Token */
@@ -342,6 +426,31 @@ export interface components {
 			/** Data */
 			data: number[][];
 		};
+		/** LocationBase */
+		LocationBase: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Name */
+			name: string;
+			/** Description */
+			description: string | null;
+			/** Latitude */
+			latitude: number | null;
+			/** Longitude */
+			longitude: number | null;
+		};
 		/**
 		 * LocationComparisonResponse
 		 * @description Respuesta para comparación de ubicaciones
@@ -351,6 +460,42 @@ export interface components {
 			labels: string[];
 			/** Data */
 			data: components["schemas"]["BarDatasetResponse"][];
+		};
+		/** LocationCreate */
+		LocationCreate: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Name */
+			name: string;
+			/** Description */
+			description: string | null;
+			/** Latitude */
+			latitude: number | null;
+			/** Longitude */
+			longitude: number | null;
+		};
+		/** LocationUpdate */
+		LocationUpdate: {
+			/** Name */
+			name?: string | null;
+			/** Description */
+			description?: string | null;
+			/** Latitude */
+			latitude?: number | null;
+			/** Longitude */
+			longitude?: number | null;
 		};
 		/** ModuleBase */
 		ModuleBase: {
@@ -428,6 +573,11 @@ export interface components {
 			name: string;
 			/** Description */
 			description?: string | null;
+			/**
+			 * Modules
+			 * @default []
+			 */
+			modules: number[];
 		};
 		/** RoleUpdate */
 		RoleUpdate: {
@@ -435,6 +585,33 @@ export interface components {
 			name?: string | null;
 			/** Description */
 			description?: string | null;
+			/** Modules */
+			modules?: number[] | null;
+			/** Active */
+			active?: boolean | null;
+		};
+		/** RoleWithModulesDTO */
+		RoleWithModulesDTO: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Name */
+			name: string;
+			/** Description */
+			description?: string | null;
+			/** Modules */
+			modules: components["schemas"]["ModuleBase"][];
 		};
 		/**
 		 * TimeLineResponse
@@ -509,6 +686,8 @@ export interface components {
 			email?: string | null;
 			/** Name */
 			name?: string | null;
+			/** Active */
+			active?: boolean | null;
 			/** Roles */
 			roles?: number[] | null;
 		};
@@ -539,6 +718,31 @@ export interface components {
 			identification: string;
 			/** Modules */
 			modules: components["schemas"]["ModuleBase"][];
+			/** Roles */
+			roles: components["schemas"]["RoleBase"][];
+		};
+		/** UserWithRolesDTO */
+		UserWithRolesDTO: {
+			/** Id */
+			id?: number | null;
+			/**
+			 * Active
+			 * @default true
+			 */
+			active: boolean;
+			/**
+			 * Creation Date
+			 * Format: date-time
+			 */
+			creation_date?: string;
+			/** Update Date */
+			update_date?: string | null;
+			/** Email */
+			email: string;
+			/** Name */
+			name: string;
+			/** Identification */
+			identification: string;
 			/** Roles */
 			roles: components["schemas"]["RoleBase"][];
 		};
@@ -720,6 +924,37 @@ export interface operations {
 			};
 		};
 	};
+	get_all_users_with_roles_api_iam_users_with_roles_get: {
+		parameters: {
+			query?: {
+				active?: boolean | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["UserWithRolesDTO"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
 	get_user_by_id_api_iam_users__user_id__get: {
 		parameters: {
 			query?: never;
@@ -817,7 +1052,9 @@ export interface operations {
 	};
 	get_all_roles_api_iam_roles_get: {
 		parameters: {
-			query?: never;
+			query?: {
+				active?: boolean | null;
+			};
 			header?: never;
 			path?: never;
 			cookie?: never;
@@ -830,7 +1067,16 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": components["schemas"]["DbRole"][];
+					"application/json": components["schemas"]["RoleBase"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
 				};
 			};
 		};
@@ -854,7 +1100,7 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": components["schemas"]["DbRole"];
+					"application/json": components["schemas"]["RoleBase"];
 				};
 			};
 			/** @description Validation Error */
@@ -885,7 +1131,7 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": components["schemas"]["DbRole"];
+					"application/json": components["schemas"]["RoleBase"];
 				};
 			};
 			/** @description Validation Error */
@@ -920,7 +1166,7 @@ export interface operations {
 					[name: string]: unknown;
 				};
 				content: {
-					"application/json": components["schemas"]["DbRole"];
+					"application/json": components["schemas"]["RoleBase"];
 				};
 			};
 			/** @description Validation Error */
@@ -940,6 +1186,258 @@ export interface operations {
 			header?: never;
 			path: {
 				role_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			204: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_all_roles_with_modules_api_iam_roles_with_modules_get: {
+		parameters: {
+			query?: {
+				active?: boolean | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["RoleWithModulesDTO"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_all_modules_api_iam_modules_get: {
+		parameters: {
+			query?: {
+				active?: boolean | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["ModuleBase"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_module_by_id_api_iam_modules__module_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				module_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["ModuleBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_all_locations_api_traffic_locations_get: {
+		parameters: {
+			query?: {
+				active?: boolean | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LocationBase"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	create_location_api_traffic_locations_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["LocationCreate"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LocationBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_location_by_id_api_traffic_locations__location_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				location_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LocationBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	update_location_api_traffic_locations__location_id__put: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				location_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["LocationUpdate"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LocationBase"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	delete_location_api_traffic_locations__location_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				location_id: number;
 			};
 			cookie?: never;
 		};

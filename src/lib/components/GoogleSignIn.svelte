@@ -50,7 +50,7 @@
 			$login.mutate(
 				{ token },
 				{
-					onSuccess: () => goto(resolve("/dashboard")),
+					onSuccess: () => goto(resolve("/home")),
 					onError: (error) => console.log(error)
 				}
 			);
