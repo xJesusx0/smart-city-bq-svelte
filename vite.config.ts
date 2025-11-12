@@ -14,9 +14,9 @@ export default defineConfig({
 		}
 	},
 	ssr: {
-		noExternal: ["bits-ui"]
+		noExternal: ["bits-ui", "sonner"]
 	},
 	optimizeDeps: {
-		include: ["bits-ui"]
+		include: ["bits-ui", "sonner"]
 	}
 });

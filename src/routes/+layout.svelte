@@ -1,13 +1,14 @@
 <script lang="ts">
-	import "../app.css";
-	import favicon from "$lib/assets/favicon.svg";
-	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { queryClient } from "$lib/api/query-client";
-	import { userStore } from "$lib/stores/user";
+	import favicon from "$lib/assets/favicon.svg";
 	import FloatingThemeToggle from "$lib/components/floating-theme-toggle.svelte";
+	import { Toaster } from "$lib/components/ui/sonner";
+	import { userStore } from "$lib/stores/user";
+	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { ModeWatcher } from "mode-watcher";
-	import type { LayoutData } from "./$types";
 	import { onMount, type Snippet } from "svelte";
+	import "../app.css";
+	import type { LayoutData } from "./$types";
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 
@@ -29,4 +30,5 @@
 	{@render children()}
 	<ModeWatcher />
 	<FloatingThemeToggle />
+	<Toaster richColors />
 </QueryClientProvider>
