@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { getUsersQuery, createUpdateUserMutation } from "$lib/query/users";
-	import {
-		Table,
-		TableBody,
-		TableCell,
-		TableHead,
-		TableHeader,
-		TableRow
-	} from "$lib/components/ui/table";
 	import { Button } from "$lib/components/ui/button";
-	import { Badge } from "$lib/components/ui/badge";
 	import UserDialog from "$lib/components/admin/UserDialog.svelte";
 	import DeleteUserDialog from "$lib/components/admin/DeleteUserDialog.svelte";
-	import { Pencil, Trash2, UserPlus, UserCheck } from "@lucide/svelte";
+	import { UserPlus } from "@lucide/svelte";
 	import type { components } from "$lib/__gen__/api_v1";
+	import DataTable from "$lib/components/admin/users/data-table.svelte";
 
 	type UserWithRoles = components["schemas"]["UserWithRolesDTO"];
 
@@ -61,19 +53,10 @@
 	function handleSuccess() {
 		$usersQuery.refetch();
 	}
-
-	function formatDate(date: string | undefined) {
-		if (!date) return "N/A";
-		return new Date(date).toLocaleDateString("es-ES", {
-			year: "numeric",
-			month: "short",
-			day: "numeric"
-		});
-	}
 </script>
 
 <div class="p-8">
-	<div class="mb-8 flex items-center justify-between">
+	<div class="mb-8 flex items-start justify-between max-sm:flex-col max-sm:gap-y-4 sm:items-center">
 		<div>
 			<h1 class="text-3xl font-bold tracking-tight">Administración de Usuarios</h1>
 			<p class="mt-1 text-muted-foreground">Gestiona los usuarios del sistema</p>
@@ -108,78 +91,31 @@
 		</Button>
 	</div>
 
-	<div class="w-full overflow-x-auto rounded-lg border">
-		{#if $usersQuery.isLoading}
-			<div class="p-8 text-center">
-				<p class="text-muted-foreground">Cargando usuarios...</p>
-			</div>
-		{:else if $usersQuery.isError}
-			<div class="p-8 text-center">
-				<p class="text-destructive">Error al cargar los usuarios</p>
-				<Button variant="outline" class="mt-4" onclick={() => $usersQuery.refetch()}>
-					Reintentar
-				</Button>
-			</div>
-		{:else if users.length === 0}
-			<div class="p-8 text-center">
-				<p class="text-muted-foreground">No hay usuarios registrados</p>
-				<Button variant="outline" class="mt-4" onclick={handleCreate}>Crear primer usuario</Button>
-			</div>
-		{:else}
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead>ID</TableHead>
-						<TableHead>Nombre</TableHead>
-						<TableHead>Email</TableHead>
-						<TableHead>Identificación</TableHead>
-						<TableHead>Estado</TableHead>
-						<TableHead>Fecha de Creación</TableHead>
-						<TableHead class="text-right">Acciones</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{#each users as user (user.id)}
-						<TableRow>
-							<TableCell class="font-medium">{user.id}</TableCell>
-							<TableCell>{user.name}</TableCell>
-							<TableCell>{user.email}</TableCell>
-							<TableCell>{user.identification}</TableCell>
-							<TableCell>
-								<Badge variant={user.active ? "default" : "secondary"}>
-									{user.active ? "Activo" : "Inactivo"}
-								</Badge>
-							</TableCell>
-							<TableCell>{formatDate(user.creation_date)}</TableCell>
-							<TableCell class="text-right">
-								<div class="flex justify-end gap-2">
-									{#if user.active}
-										<Button variant="ghost" size="sm" onclick={() => handleEdit(user)}>
-											<Pencil class="h-4 w-4" />
-										</Button>
-										<Button variant="ghost" size="sm" onclick={() => handleDelete(user)}>
-											<Trash2 class="h-4 w-4" />
-										</Button>
-									{:else}
-										<Button
-											variant="ghost"
-											size="sm"
-											title="Activar usuario"
-											disabled={activatingUserId === user.id}
-											onclick={() => handleActivate(user)}
-										>
-											<UserCheck class="h-4 w-4" />
-											{activatingUserId === user.id ? "Activando..." : "Activar"}
-										</Button>
-									{/if}
-								</div>
-							</TableCell>
-						</TableRow>
-					{/each}
-				</TableBody>
-			</Table>
-		{/if}
-	</div>
+	{#if $usersQuery.isLoading}
+		<div class="p-8 text-center">
+			<p class="text-muted-foreground">Cargando usuarios...</p>
+		</div>
+	{:else if $usersQuery.isError}
+		<div class="p-8 text-center">
+			<p class="text-destructive">Error al cargar los usuarios</p>
+			<Button variant="outline" class="mt-4" onclick={() => $usersQuery.refetch()}>
+				Reintentar
+			</Button>
+		</div>
+	{:else if users.length === 0}
+		<div class="p-8 text-center">
+			<p class="text-muted-foreground">No hay usuarios registrados</p>
+			<Button variant="outline" class="mt-4" onclick={handleCreate}>Crear primer usuario</Button>
+		</div>
+	{:else}
+		<DataTable
+			data={users}
+			onEdit={handleEdit}
+			onDelete={handleDelete}
+			onActivate={handleActivate}
+			{activatingUserId}
+		/>
+	{/if}
 </div>
 
 <!-- Dialogs -->
