@@ -17,8 +17,8 @@
 	} from "$lib/components/ui/sidebar";
 	import { logout } from "$lib/query/auth";
 	import { getModuleIcon } from "$lib/utils/module-icons";
-	import { Building2, LogOut } from "@lucide/svelte";
 	import { getUserInitials } from "$lib/utils/nameHelper";
+	import { Building2, LogOut } from "@lucide/svelte";
 	import type { LayoutData } from "../../../routes/(app)/$types";
 
 	let { data }: { data: LayoutData } = $props();
@@ -59,7 +59,7 @@
 					{#each allowedModules as module (module.id)}
 						{@const IconComponent = getModuleIcon(module.icon)}
 						<SidebarMenuItem>
-							<SidebarMenuButton tooltipContent={module.name} class="h-8 p-0">
+							<SidebarMenuButton tooltipContent={module.name} class="h-10 p-0">
 								<a
 									href={module.path}
 									class="flex h-full w-full items-center justify-start gap-2 p-2"
