@@ -92,7 +92,8 @@
 					identification,
 					password,
 					roles: selectedRoleIds,
-					active: true
+					active: true,
+					must_change_password: false
 				});
 			}
 

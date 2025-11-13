@@ -3,11 +3,9 @@
 
 	let {
 		handleNext,
-		wizardFormState,
 		handleStateUpdate
 	}: {
 		handleNext: () => void;
-		wizardFormState: Record<string, unknown>;
 		handleStateUpdate: (state: Record<string, unknown>) => void;
 	} = $props();
 

@@ -53,7 +53,7 @@
 		<Card.Content class="space-y-4">
 			<div>
 				<p class="text-sm font-medium text-muted-foreground">ID de la cámara</p>
-				<p class="text-sm font-mono">{cameraId || "N/A"}</p>
+				<p class="font-mono text-sm">{cameraId || "N/A"}</p>
 			</div>
 			<div>
 				<p class="text-sm font-medium text-muted-foreground">Fecha de creación</p>

@@ -71,11 +71,12 @@
 			</Card.Content>
 		</Card.Root>
 	{:else if neighborhoodQuery && $neighborhoodQuery?.isError}
-		{@const errorMessage = $neighborhoodQuery.error?.message || "Error al obtener información geográfica"}
+		{@const errorMessage =
+			$neighborhoodQuery.error?.message || "Error al obtener información geográfica"}
 		<Card.Root>
 			<Card.Content class="p-6">
 				<div class="space-y-4">
-					<p class="text-destructive font-medium">{errorMessage}</p>
+					<p class="font-medium text-destructive">{errorMessage}</p>
 					<p class="text-sm text-muted-foreground">
 						Por favor, intenta seleccionar otra ubicación en el mapa.
 					</p>
