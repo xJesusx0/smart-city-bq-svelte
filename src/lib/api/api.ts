@@ -1,6 +1,7 @@
 import createClient from "openapi-fetch";
 import type { paths } from "$lib/__gen__/api_v1";
-import { BASE_URL, TOKEN_KEY } from "./const";
+import type { paths as geoPaths } from "$lib/__gen__/api_geo";
+import { BASE_URL, GEO_BASE_URL, TOKEN_KEY } from "./const";
 import { deleteCookie, getCookie } from "./helpers";
 import { browser } from "$app/environment";
 
@@ -81,6 +82,47 @@ export const apiV1Auth = createClient<paths>({
 export function createServerApiClient(token?: string) {
 	return createClient<paths>({
 		baseUrl: BASE_URL,
+		headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+		credentials: "include"
+	});
+}
+
+/**
+ * Cliente API Geo tipado con openapi-fetch
+ */
+export const apiGeo = createClient<geoPaths>({
+	baseUrl: GEO_BASE_URL,
+	fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+		const headers = new Headers(init?.headers);
+
+		if (browser) {
+			const token = getCookie(TOKEN_KEY);
+			if (token) {
+				headers.set("Authorization", `Bearer ${token}`);
+			}
+		}
+
+		const response = await fetch(input, {
+			...init,
+			headers,
+			credentials: "include"
+		});
+
+		if (browser && response.status === 401) {
+			deleteCookie(TOKEN_KEY);
+			window.location.href = "/login";
+		}
+
+		return response;
+	}
+});
+
+/**
+ * Cliente API Geo para uso en el servidor (hooks.server.ts)
+ */
+export function createServerGeoClient(token?: string) {
+	return createClient<geoPaths>({
+		baseUrl: GEO_BASE_URL,
 		headers: token ? { Authorization: `Bearer ${token}` } : undefined,
 		credentials: "include"
 	});

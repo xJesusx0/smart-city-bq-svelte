@@ -55,6 +55,23 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/auth/change-password": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Change Password */
+		post: operations["change_password_api_auth_change_password_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/api/iam/users": {
 		parameters: {
 			query?: never;
@@ -374,6 +391,13 @@ export interface components {
 			 */
 			client_secret?: string | null;
 		};
+		/** ChangePasswordDTO */
+		ChangePasswordDTO: {
+			/** Token */
+			token: string;
+			/** Password */
+			password: string;
+		};
 		/**
 		 * DashboardSummaryResponse
 		 * @description Respuesta para resumen del dashboard
@@ -652,6 +676,13 @@ export interface components {
 			name: string;
 			/** Identification */
 			identification: string;
+			/**
+			 * Must Change Password
+			 * @default false
+			 */
+			must_change_password: boolean | null;
+			/** Update Password Uuid */
+			update_password_uuid?: string | null;
 		};
 		/** UserCreate */
 		UserCreate: {
@@ -675,6 +706,13 @@ export interface components {
 			name: string;
 			/** Identification */
 			identification: string;
+			/**
+			 * Must Change Password
+			 * @default false
+			 */
+			must_change_password: boolean | null;
+			/** Update Password Uuid */
+			update_password_uuid?: string | null;
 			/** Roles */
 			roles: number[];
 			/** Password */
@@ -716,6 +754,13 @@ export interface components {
 			name: string;
 			/** Identification */
 			identification: string;
+			/**
+			 * Must Change Password
+			 * @default false
+			 */
+			must_change_password: boolean | null;
+			/** Update Password Uuid */
+			update_password_uuid?: string | null;
 			/** Modules */
 			modules: components["schemas"]["ModuleBase"][];
 			/** Roles */
@@ -743,6 +788,13 @@ export interface components {
 			name: string;
 			/** Identification */
 			identification: string;
+			/**
+			 * Must Change Password
+			 * @default false
+			 */
+			must_change_password: boolean | null;
+			/** Update Password Uuid */
+			update_password_uuid?: string | null;
 			/** Roles */
 			roles: components["schemas"]["RoleBase"][];
 		};
@@ -856,6 +908,39 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["UserWithModulesDTO"];
+				};
+			};
+		};
+	};
+	change_password_api_auth_change_password_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["ChangePasswordDTO"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["Token"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
 				};
 			};
 		};
