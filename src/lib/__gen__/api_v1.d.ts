@@ -351,6 +351,23 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/geo/neighborhoods/point": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Neighborhood By Point */
+		get: operations["get_neighborhood_by_point_api_geo_neighborhoods_point_get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -545,6 +562,33 @@ export interface components {
 			path: string;
 			/** Icon */
 			icon: string;
+		};
+		/** NeighborhoodInfo */
+		NeighborhoodInfo: {
+			/** Neighborhood Id */
+			neighborhood_id: number;
+			/** Neighborhood Name */
+			neighborhood_name: string;
+			/** City Id */
+			city_id: number;
+			/** City Name */
+			city_name: string;
+			/** City Dane Code */
+			city_dane_code: string;
+			/** Department Id */
+			department_id: number;
+			/** Department Name */
+			department_name: string;
+			/** Department Dane Code */
+			department_dane_code: string;
+			/** Country Id */
+			country_id: number;
+			/** Country Name */
+			country_name: string;
+			/** Locality Name */
+			locality_name: string;
+			/** Urban Area Name */
+			urban_area_name: string;
 		};
 		/**
 		 * PieDatasetResponse
@@ -1692,6 +1736,38 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["DashboardSummaryResponse"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_neighborhood_by_point_api_geo_neighborhoods_point_get: {
+		parameters: {
+			query: {
+				latitude: number;
+				longitude: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["NeighborhoodInfo"];
 				};
 			};
 			/** @description Validation Error */

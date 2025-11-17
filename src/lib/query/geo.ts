@@ -2,7 +2,7 @@ import { createQuery } from "@tanstack/svelte-query";
 import { apiGeo } from "$lib/api/api";
 import type { components } from "$lib/__gen__/api_geo";
 
-type NeighborhoodByPoint = components["schemas"]["NeighborhoodByPoint"];
+type NeighborhoodByPoint = components["schemas"]["NeighborhoodDto"];
 
 export const geoKeys = {
 	all: ["geo"] as const,
