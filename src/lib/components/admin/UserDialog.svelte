@@ -32,7 +32,6 @@
 	let email = $state(user?.email || "");
 	let name = $state(user?.name || "");
 	let identification = $state(user?.identification || "");
-	let password = $state("");
 	let selectedRoleIds = $state<number[]>([]);
 	// Update form when user changes
 	$effect(() => {
@@ -40,7 +39,6 @@
 			email = user.email || "";
 			name = user.name || "";
 			identification = user.identification || "";
-			password = "";
 			selectedRoleIds = user.roles?.map((role) => role.id!) || [];
 		}
 	});
@@ -86,7 +84,6 @@
 					email,
 					name,
 					identification,
-					password,
 					roles: selectedRoleIds,
 					active: true,
 					must_change_password: true
@@ -99,7 +96,6 @@
 			email = "";
 			name = "";
 			identification = "";
-			password = "";
 			selectedRoleIds = [];
 		} catch (error) {
 			console.error("Error saving user:", error);
@@ -126,7 +122,6 @@
 		email = "";
 		name = "";
 		identification = "";
-		password = "";
 		selectedRoleIds = [];
 	}
 </script>

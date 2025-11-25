@@ -872,8 +872,6 @@ export interface components {
 			update_password_uuid?: string | null;
 			/** Roles */
 			roles: number[];
-			/** Password */
-			password: string;
 		};
 		/** UserUpdate */
 		UserUpdate: {
