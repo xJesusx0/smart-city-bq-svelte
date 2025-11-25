@@ -6,6 +6,7 @@ import { createMutation, createQuery } from "@tanstack/svelte-query";
 
 type LoginBodyType = components["schemas"]["Body_login_api_auth_login_post"];
 type GoogleTokenRequest = components["schemas"]["GoogleTokenRequest"];
+type ChangePasswordDTO = components["schemas"]["ChangePasswordDTO"];
 
 export function loginUser() {
 	return createMutation({
@@ -79,6 +80,33 @@ export function loginWithGoogle() {
 					body: JSON.stringify({ token })
 				});
 			}
+			return data;
+		}
+	});
+}
+
+export function changePassword() {
+	return createMutation({
+		mutationKey: ["change-password"],
+		mutationFn: async (body: ChangePasswordDTO) => {
+			const { data, error, response } = await apiV1.POST("/api/auth/change-password", {
+				body: body
+			});
+
+			if (error || !response.ok) {
+				throw new Error("Change password failed");
+			}
+
+			const token = data?.access_token;
+			if (token) {
+				setCookie(TOKEN_KEY, token);
+				await fetch("/login", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ token })
+				});
+			}
+
 			return data;
 		}
 	});

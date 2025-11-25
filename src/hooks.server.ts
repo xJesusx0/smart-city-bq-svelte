@@ -3,7 +3,7 @@ import { TOKEN_KEY } from "$lib/api/const";
 import { redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const publicRoutes = ["/", "/login", "/register", "/404", "/logout"];
+	const publicRoutes = ["/", "/login", "/register", "/404", "/logout", "/change-password"];
 
 	const pathName = event.url.pathname;
 	const routeId = event.route.id;
