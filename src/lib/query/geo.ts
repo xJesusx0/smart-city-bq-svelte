@@ -1,5 +1,5 @@
 import { createQuery } from "@tanstack/svelte-query";
-import { apiGeo } from "$lib/api/api";
+import { apiV1 } from "$lib/api/api";
 import type { components } from "$lib/__gen__/api_geo";
 
 type NeighborhoodByPoint = components["schemas"]["NeighborhoodDto"];
@@ -14,7 +14,7 @@ export function getNeighborhoodByPoint(lat: number, lng: number) {
 	return createQuery({
 		queryKey: geoKeys.byPoint(lat, lng),
 		queryFn: async () => {
-			const { data, error, response } = await apiGeo.GET("/api/v1/neighborhoods/point", {
+			const { data, error, response } = await apiV1.GET("/api/geo/neighborhoods/point", {
 				params: {
 					query: {
 						latitude: lat,

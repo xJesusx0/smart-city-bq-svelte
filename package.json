@@ -6,8 +6,6 @@
 	"scripts": {
 		"generate:api": "openapi-typescript https://smart-city-bq-traffic-api.onrender.com/openapi.json -o src/lib/__gen__/api_v1.d.ts",
 		"generate:api-local": "openapi-typescript http://127.0.0.1:8000/openapi.json -o src/lib/__gen__/api_v1.d.ts",
-		"generate-geo:api": "openapi-typescript https://nest-geo-info-service.vercel.app/openapi.json -o src/lib/__gen__/api_geo.d.ts",
-		"generate-geo:api-local": "openapi-typescript http://127.0.0.1:3000/openapi.json -o src/lib/__gen__/api_geo.d.ts",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
