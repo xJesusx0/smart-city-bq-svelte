@@ -6,6 +6,7 @@
 	import { Field, FieldGroup, FieldLabel } from "$lib/components/ui/field/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { changePassword } from "$lib/query/auth";
+	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
 
 	let { data }: { data: PageData } = $props();
@@ -18,7 +19,7 @@
 
 	const changePasswordMutation = changePassword();
 
-	$effect(() => {
+	onMount(() => {
 		if (!data.token) {
 			validationError = "Token no válido o faltante";
 		}
