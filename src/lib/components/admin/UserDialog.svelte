@@ -78,10 +78,6 @@
 					user: updatePayload
 				});
 			} else {
-				if (!password) {
-					console.error("La contraseña es requerida para crear un usuario");
-					return;
-				}
 				if (selectedRoleIds.length === 0) {
 					console.error("Debes seleccionar al menos un rol para el usuario");
 					return;
@@ -93,7 +89,7 @@
 					password,
 					roles: selectedRoleIds,
 					active: true,
-					must_change_password: false
+					must_change_password: true
 				});
 			}
 
@@ -172,17 +168,6 @@
 						type="text"
 						bind:value={identification}
 						placeholder="CC/TI"
-						required
-					/>
-				</div>
-
-				<div class="space-y-2">
-					<Label for="password">Contraseña</Label>
-					<Input
-						id="password"
-						type="password"
-						bind:value={password}
-						placeholder="Contraseña segura"
 						required
 					/>
 				</div>

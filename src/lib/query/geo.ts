@@ -1,8 +1,5 @@
 import { createQuery } from "@tanstack/svelte-query";
-import { apiGeo } from "$lib/api/api";
-import type { components } from "$lib/__gen__/api_geo";
-
-type NeighborhoodByPoint = components["schemas"]["NeighborhoodDto"];
+import { apiV1 } from "$lib/api/api";
 
 export const geoKeys = {
 	all: ["geo"] as const,
@@ -14,7 +11,7 @@ export function getNeighborhoodByPoint(lat: number, lng: number) {
 	return createQuery({
 		queryKey: geoKeys.byPoint(lat, lng),
 		queryFn: async () => {
-			const { data, error, response } = await apiGeo.GET("/api/v1/neighborhoods/point", {
+			const { data, error, response } = await apiV1.GET("/api/geo/neighborhoods/point", {
 				params: {
 					query: {
 						latitude: lat,
@@ -40,7 +37,7 @@ export function getNeighborhoodByPoint(lat: number, lng: number) {
 			}
 
 			// Verificar que tenga al menos un campo de información geográfica
-			const neighborhoodData = data as NeighborhoodByPoint;
+			const neighborhoodData = data;
 			if (!neighborhoodData.neighborhood_id && !neighborhoodData.neighborhood_name) {
 				throw new Error("No se encontró información geográfica para esta ubicación");
 			}

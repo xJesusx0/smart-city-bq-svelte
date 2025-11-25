@@ -368,6 +368,59 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/api/geo/intersections": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Intersections By Point */
+		get: operations["get_intersections_by_point_api_geo_intersections_get"];
+		put?: never;
+		/** Create Intersection */
+		post: operations["create_intersection_api_geo_intersections_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/geo/traffic-lights": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Traffic Lights */
+		get: operations["get_traffic_lights_api_geo_traffic_lights_get"];
+		put?: never;
+		/** Create Traffic Light */
+		post: operations["create_traffic_light_api_geo_traffic_lights_post"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/geo/traffic-lights/{traffic_light_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Traffic Light By Id */
+		get: operations["get_traffic_light_by_id_api_geo_traffic_lights__traffic_light_id__get"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -414,6 +467,24 @@ export interface components {
 			token: string;
 			/** Password */
 			password: string;
+		};
+		/** CreateIntersectionDTO */
+		CreateIntersectionDTO: {
+			/** Street A Id */
+			street_a_id: number;
+			/** Street B Id */
+			street_b_id: number;
+		};
+		/** CreateTrafficLightDTO */
+		CreateTrafficLightDTO: {
+			/** Name */
+			name: string;
+			/** Intersection Id */
+			intersection_id: number;
+			/** Latitude */
+			latitude: number;
+			/** Longitude */
+			longitude: number;
 		};
 		/**
 		 * DashboardSummaryResponse
@@ -466,6 +537,25 @@ export interface components {
 			days: string[];
 			/** Data */
 			data: number[][];
+		};
+		/** Intersection */
+		Intersection: {
+			/** Id */
+			id?: number | null;
+			/** Street A Id */
+			street_a_id?: number | null;
+			/** Street A Name */
+			street_a_name?: string | null;
+			/** Street B Id */
+			street_b_id?: number | null;
+			/** Street B Name */
+			street_b_name?: string | null;
+			/** Distance Meters */
+			distance_meters?: number | null;
+			/** Geojson */
+			geojson?: {
+				[key: string]: unknown;
+			} | null;
 		};
 		/** LocationBase */
 		LocationBase: {
@@ -697,6 +787,29 @@ export interface components {
 			access_token: string;
 			/** Token Type */
 			token_type: string;
+		};
+		/** TrafficLight */
+		TrafficLight: {
+			/** Id */
+			id?: number | null;
+			/** Name */
+			name?: string | null;
+			/** Intersection Id */
+			intersection_id?: number | null;
+			/** Latitude */
+			latitude?: number | null;
+			/** Longitude */
+			longitude?: number | null;
+			/** Key Hash */
+			key_hash?: string | null;
+			/** Active */
+			active?: boolean | null;
+			/** Created At */
+			created_at?: string | null;
+			/** Updated At */
+			updated_at?: string | null;
+			/** Key */
+			key?: string | null;
 		};
 		/** UserBase */
 		UserBase: {
@@ -1768,6 +1881,170 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["NeighborhoodInfo"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_intersections_by_point_api_geo_intersections_get: {
+		parameters: {
+			query: {
+				latitude: number;
+				longitude: number;
+				radius: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["Intersection"][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	create_intersection_api_geo_intersections_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["CreateIntersectionDTO"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["Intersection"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_traffic_lights_api_geo_traffic_lights_get: {
+		parameters: {
+			query?: {
+				name?: string | null;
+				intersection_id?: number | null;
+				longitude?: number | null;
+				latitude?: number | null;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": (components["schemas"]["TrafficLight"] | null)[];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	create_traffic_light_api_geo_traffic_lights_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["CreateTrafficLightDTO"];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["TrafficLight"];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HTTPValidationError"];
+				};
+			};
+		};
+	};
+	get_traffic_light_by_id_api_geo_traffic_lights__traffic_light_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				traffic_light_id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["TrafficLight"];
 				};
 			};
 			/** @description Validation Error */
