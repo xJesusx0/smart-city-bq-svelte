@@ -44,7 +44,7 @@
 		detailsDialogOpen = true;
 	}
 
-	const filteredTrafficLights = $derived(() => {
+	const filteredTrafficLights = $derived.by(() => {
 		const data = $trafficLightsQuery?.data ?? [];
 		let filtered = data;
 
@@ -64,9 +64,6 @@
 			filtered = filtered.filter((tl) => tl.active === true);
 		} else if (statusFilter === "inactive") {
 			filtered = filtered.filter((tl) => tl.active === false);
-		} else if (statusFilter !== "all") {
-			// If statusFilter is not a valid value, default to "all"
-			statusFilter = "all";
 		}
 
 		return filtered;
@@ -139,7 +136,7 @@
 			</div>
 
 			<div class="rounded-lg border bg-card p-4 shadow-sm sm:p-6">
-				{#if filteredTrafficLights().length === 0}
+				{#if filteredTrafficLights.length === 0}
 					<div class="flex flex-col items-center justify-center gap-4 py-12 text-center">
 						<p class="text-muted-foreground">
 							{#if searchQuery || statusFilter !== "all"}
@@ -154,13 +151,13 @@
 						<Tabs.Content value="map" class="mt-0">
 							<div class="space-y-4">
 								<TrafficLightsMap
-									trafficLights={filteredTrafficLights()}
+									trafficLights={filteredTrafficLights}
 									onViewDetails={handleViewDetails}
 								/>
 							</div>
 						</Tabs.Content>
 						<Tabs.Content value="list" class="mt-0">
-							<TrafficLightsList data={filteredTrafficLights()} onViewDetails={handleViewDetails} />
+							<TrafficLightsList data={filteredTrafficLights} onViewDetails={handleViewDetails} />
 						</Tabs.Content>
 					</Tabs.Root>
 				{/if}
