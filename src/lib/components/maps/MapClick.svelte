@@ -21,7 +21,7 @@
 	}>();
 
 	const options = {
-		center: [11.013096, -74.827679],
+		center: [11.013096, -74.827679] as [number, number],
 		zoom: 14
 	};
 
