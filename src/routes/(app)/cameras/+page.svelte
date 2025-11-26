@@ -2,7 +2,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import TrafficLightsMap from "$lib/components/cameras/traffic-lights-map.svelte";
 	import { getTrafficLightsQuery } from "$lib/query/geo";
-	import { AlertTriangle, Loader2, MapPin, PlusCircle } from "@lucide/svelte";
+	import { AlertTriangle, Loader, MapPin, PlusCircle } from "@lucide/svelte";
 	import { goto } from "$app/navigation";
 
 	const trafficLightsQuery = getTrafficLightsQuery();
@@ -37,7 +37,7 @@
 	<section class="rounded-lg border bg-card p-6 shadow-sm">
 		{#if $trafficLightsQuery?.isLoading}
 			<div class="flex items-center justify-center gap-2 text-muted-foreground">
-				<Loader2 class="h-4 w-4 animate-spin" />
+				<Loader class="h-4 w-4 animate-spin" />
 				<p>Cargando semáforos...</p>
 			</div>
 		{:else if $trafficLightsQuery?.isError}

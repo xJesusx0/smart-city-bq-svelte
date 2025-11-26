@@ -70,7 +70,7 @@
 					</div>
 					{#if intersection?.distance_meters !== null && intersection?.distance_meters !== undefined}
 						<p class="text-xs text-muted-foreground">
-							Punto seleccionado a {(intersection.distance_meters ?? 0).toFixed(1)} m
+							Punto seleccionado a {intersection.distance_meters.toFixed(1)} m
 						</p>
 					{/if}
 				</div>

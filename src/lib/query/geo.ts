@@ -34,7 +34,9 @@ export function getNeighborhoodByPoint(lat: number, lng: number) {
 				if (response.status === 404) {
 					throw new Error("No se encontró la ubicación solicitada");
 				}
-				throw new Error("Error al obtener información del barrio");
+				const details =
+					(error as unknown as { message?: string })?.message ?? JSON.stringify(error, null, 2);
+				throw new Error(`Error al obtener información del barrio: ${details}`);
 			}
 
 			// Verificar si la respuesta tiene un mensaje de error (aunque sea 200)
@@ -73,7 +75,9 @@ export function getTrafficLightsQuery(filters?: {
 			});
 
 			if (error) {
-				throw new Error("Error al obtener los semáforos");
+				const details =
+					(error as unknown as { message?: string })?.message ?? JSON.stringify(error, null, 2);
+				throw new Error(`Error al obtener los semáforos: ${details}`);
 			}
 
 			return (data || []).filter(Boolean) as TrafficLight[];
@@ -96,7 +100,9 @@ export function getIntersectionsByPointQuery(lat: number, lng: number, radius: n
 			});
 
 			if (error) {
-				throw new Error("Error al obtener intersecciones cercanas");
+				const details =
+					(error as unknown as { message?: string })?.message ?? JSON.stringify(error, null, 2);
+				throw new Error(`Error al obtener intersecciones cercanas: ${details}`);
 			}
 
 			return (data || []) as Intersection[];
@@ -115,7 +121,9 @@ export function createTrafficLightMutation() {
 			});
 
 			if (error) {
-				throw new Error("Error al crear el semáforo");
+				const details =
+					(error as unknown as { message?: string })?.message ?? JSON.stringify(error, null, 2);
+				throw new Error(`Error al crear el semáforo: ${details}`);
 			}
 
 			return data as TrafficLight;

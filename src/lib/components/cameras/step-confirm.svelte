@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
+	import { ArrowLeft, Check, Loader } from "@lucide/svelte";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import MapPreview from "$lib/components/maps/MapPreview.svelte";
 	import {
@@ -7,7 +8,6 @@
 		getIntersectionsByPointQuery,
 		getNeighborhoodByPoint
 	} from "$lib/query/geo";
-	import { ArrowLeft, Check, LoaderCircle } from "@lucide/svelte";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import type { components } from "$lib/__gen__/api_v1";
 	import { toast } from "svelte-sonner";
@@ -127,7 +127,7 @@
 		<Card.Root>
 			<Card.Content class="p-6">
 				<div class="flex items-center justify-center gap-2">
-					<LoaderCircle class="h-4 w-4 animate-spin" />
+					<Loader class="h-4 w-4 animate-spin" />
 					<p class="text-muted-foreground">Obteniendo información geográfica...</p>
 				</div>
 			</Card.Content>
@@ -186,7 +186,7 @@
 
 					{#if intersectionsQuery && $intersectionsQuery?.isLoading}
 						<div class="flex items-center gap-2 text-sm text-muted-foreground">
-							<LoaderCircle class="h-4 w-4 animate-spin" />
+							<Loader class="h-4 w-4 animate-spin" />
 							Buscando intersecciones cercanas...
 						</div>
 					{:else if intersectionsQuery && $intersectionsQuery?.isError}
@@ -201,7 +201,7 @@
 							</p>
 							{#if closestIntersection?.distance_meters !== null && closestIntersection?.distance_meters !== undefined}
 								<p class="text-muted-foreground">
-									A {(closestIntersection.distance_meters ?? 0).toFixed(1)} metros del punto seleccionado.
+									A {closestIntersection.distance_meters.toFixed(1)} metros del punto seleccionado.
 								</p>
 							{/if}
 						</div>
@@ -241,7 +241,7 @@
 						!!($intersectionsQuery?.isError || $intersectionsQuery?.isLoading)}
 				>
 					{#if $createTrafficLight.isPending}
-						<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+						<Loader class="mr-2 h-4 w-4 animate-spin" />
 						Creando...
 					{:else}
 						<Check class="mr-2 h-4 w-4" />

@@ -42,7 +42,7 @@
 			<svelte:component this={MapComponent} options={mapOptions}>
 				<svelte:component this={TileLayerComponent} url={tileLayerUrl} />
 
-				{#each trafficLights as light (light?.id ?? light?.key_hash ?? light?.name ?? Math.random())}
+				{#each trafficLights as light, i (light?.id ?? light?.key_hash ?? light?.name ?? i)}
 					{#if light?.latitude !== null && light?.latitude !== undefined && light?.longitude !== null && light?.longitude !== undefined}
 						<svelte:component this={MarkerComponent} latLng={[light.latitude, light.longitude]}>
 							{#if TooltipComponent}
