@@ -1,68 +1,65 @@
 <script lang="ts">
-	import { WizardComponent } from "svelte-wizard";
-	import StepLocation from "$lib/components/cameras/step-location.svelte";
-	import StepConfirm from "$lib/components/cameras/step-confirm.svelte";
-	import StepSuccess from "$lib/components/cameras/step-success.svelte";
-	import { MapPin } from "@lucide/svelte";
+	import { Button } from "$lib/components/ui/button/index.js";
+	import TrafficLightsMap from "$lib/components/cameras/traffic-lights-map.svelte";
+	import { getTrafficLightsQuery } from "$lib/query/geo";
+	import { AlertTriangle, Loader2, MapPin, PlusCircle } from "@lucide/svelte";
+	import { goto } from "$app/navigation";
 
-	let stepsList = [
-		{ step: StepLocation, title: "Ubicación" },
-		{ step: StepConfirm, title: "Confirmación" },
-		{ step: StepSuccess, title: "Completado" }
-	];
+	const trafficLightsQuery = getTrafficLightsQuery();
 
-	let options = $state({
-		showTitles: true,
-		showProgressBar: true,
-		showStepCount: true,
-		clickableNavigation: false,
-		shouldAnimate: true,
-		defaultStep: 0
-	});
-
-	let defaultFormState = {
-		coordinates: null,
-		neighborhoodInfo: null,
-		cameraId: null,
-		createdAt: null
-	};
-
-	let customClassnames = {
-		activeTitleClass: "text-foreground font-semibold",
-		inactiveTitleClass: "text-muted-foreground",
-		activeBarItemClass: "bg-primary",
-		inactiveBarItemClass: "bg-muted",
-		activeStepNumberClass: "bg-primary text-primary-foreground",
-		inactiveStepNumberClass: "bg-muted text-muted-foreground"
-	};
-
-	let wizardFormState = $state(defaultFormState);
-	let currentIndex = $state(0);
+	function handleCreateTrafficLight() {
+		goto("/cameras/create");
+	}
 </script>
 
 <svelte:head>
-	<title>Cámaras - Smart City</title>
+	<title>Semáforos - Smart City</title>
 </svelte:head>
 
-<div class="p-8">
-	<div class="mb-8">
-		<div class="flex items-center gap-2">
-			<MapPin class="h-6 w-6" />
-			<h1 class="text-3xl font-bold tracking-tight">Crear Nueva Cámara</h1>
+<div class="space-y-8 p-8">
+	<header class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+		<div>
+			<div class="flex items-center gap-2">
+				<MapPin class="h-6 w-6" />
+				<h1 class="text-3xl font-bold tracking-tight">Mapa de semáforos</h1>
+			</div>
+			<p class="mt-2 text-muted-foreground">
+				Visualiza los semáforos instalados en la ciudad. Los activos se muestran en verde y los
+				inactivos en rojo.
+			</p>
 		</div>
-		<p class="mt-2 text-muted-foreground">
-			Completa los pasos para registrar una nueva cámara o semáforo en el sistema
-		</p>
-	</div>
+		<Button class="gap-2" onclick={handleCreateTrafficLight}>
+			<PlusCircle class="h-4 w-4" />
+			Crear semáforo
+		</Button>
+	</header>
 
-	<div class="rounded-lg border bg-card p-6 shadow-sm">
-		<WizardComponent
-			{customClassnames}
-			{stepsList}
-			{options}
-			{defaultFormState}
-			bind:wizardFormState
-			bind:currentIndex
-		/>
-	</div>
+	<section class="rounded-lg border bg-card p-6 shadow-sm">
+		{#if $trafficLightsQuery?.isLoading}
+			<div class="flex items-center justify-center gap-2 text-muted-foreground">
+				<Loader2 class="h-4 w-4 animate-spin" />
+				<p>Cargando semáforos...</p>
+			</div>
+		{:else if $trafficLightsQuery?.isError}
+			<div
+				class="flex flex-col items-center justify-center gap-4 text-center text-muted-foreground"
+			>
+				<AlertTriangle class="h-8 w-8 text-destructive" />
+				<div>
+					<p class="font-medium text-destructive">No pudimos cargar los semáforos</p>
+					<p>Intenta recargar la página o vuelve más tarde.</p>
+				</div>
+				<Button variant="outline" onclick={() => $trafficLightsQuery?.refetch?.()}>
+					Intentar nuevamente
+				</Button>
+			</div>
+		{:else}
+			<div class="space-y-4">
+				<p class="text-sm text-muted-foreground">
+					{$trafficLightsQuery?.data?.length || 0} semáforos registrados
+				</p>
+				<TrafficLightsMap trafficLights={$trafficLightsQuery?.data ?? []} />
+			</div>
+		{/if}
+	</section>
 </div>
