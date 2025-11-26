@@ -24,8 +24,7 @@
 				<h1 class="text-3xl font-bold tracking-tight">Mapa de semáforos</h1>
 			</div>
 			<p class="mt-2 text-muted-foreground">
-				Visualiza los semáforos instalados en la ciudad. Los activos se muestran en verde y los
-				inactivos en rojo.
+				Visualiza los semáforos instalados en la ciudad.
 			</p>
 		</div>
 		<Button class="gap-2" onclick={handleCreateTrafficLight}>
