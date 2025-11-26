@@ -55,13 +55,13 @@
 
 	$effect(() => {
 		if (intersectionsQuery && $intersectionsQuery?.data?.length) {
-		closestIntersection = ($intersectionsQuery?.data || [])
-			.filter((intersection) => intersection?.id)
-			.sort((a, b) => {
-				const distanceA = a?.distance_meters ?? Number.POSITIVE_INFINITY;
-				const distanceB = b?.distance_meters ?? Number.POSITIVE_INFINITY;
-				return distanceA - distanceB;
-			})[0];
+			closestIntersection = ($intersectionsQuery?.data || [])
+				.filter((intersection) => intersection?.id)
+				.sort((a, b) => {
+					const distanceA = a?.distance_meters ?? Number.POSITIVE_INFINITY;
+					const distanceB = b?.distance_meters ?? Number.POSITIVE_INFINITY;
+					return distanceA - distanceB;
+				})[0];
 		} else {
 			closestIntersection = null;
 		}

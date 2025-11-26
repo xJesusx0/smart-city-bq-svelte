@@ -23,9 +23,7 @@
 				<MapPin class="h-6 w-6" />
 				<h1 class="text-3xl font-bold tracking-tight">Mapa de semáforos</h1>
 			</div>
-			<p class="mt-2 text-muted-foreground">
-				Visualiza los semáforos instalados en la ciudad.
-			</p>
+			<p class="mt-2 text-muted-foreground">Visualiza los semáforos instalados en la ciudad.</p>
 		</div>
 		<Button class="gap-2" onclick={handleCreateTrafficLight}>
 			<PlusCircle class="h-4 w-4" />
